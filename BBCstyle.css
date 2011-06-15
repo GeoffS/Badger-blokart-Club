@@ -12,6 +12,7 @@ h1 {
    color: #aaaaaa;
 }
 h2 {
+   text-align: left;
    margin-top:5px;
    font-size: 24px;
    font-weight: bold;
@@ -28,7 +29,14 @@ p, ul, tr, td, table {
 }
 img.blokartLogo {
    vertical-align:baseline;
+   border-width:0;
 }
+img.facebookLogo {
+   vertical-align:baseline;
+   border-width:0;
+   margin-bottom:-2px;
+}
+
 p.topTitle {
    width:80%;
    padding:5px;
@@ -71,6 +79,16 @@ a.mtp:link {
 a.mtp:visited {
    text-decoration: none;
    color: #000000; 
+   font-weight:normal;
+}
+a.fb:link {
+   text-decoration: underline; 
+   color: #3B5998; 
+   font-weight:bold;
+}
+a.fb:visited {
+   text-decoration: none;
+   color: #3B5998; 
    font-weight:normal;
 }
 .textLeft {
