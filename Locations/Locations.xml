@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locations>
+   <location name="MATC Lot" lat="43.12274" lng="-89.33206" mapCtrLat="43.12178" mapCtrLng="-89.3325" zoom="17" />
+   <location name="DMV Lot" lat="43.07407" lng="-89.45797" zoom="18" />
+</locations>
