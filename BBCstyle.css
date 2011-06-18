@@ -19,7 +19,7 @@ h2 {
    color: #000000;
 }
 hr {
-   margin-top: 30px;
+   margin-top: 15px;
    width: 85%;
    margin-left: auto;
    margin-right: auto;
@@ -153,4 +153,12 @@ span.regH {
    vertical-align:top;
    color:black;
 }
+ul {
+    width: 30em;
+}
+ul li {
+    float: left;
+    width: 10em;
+}
+
 
