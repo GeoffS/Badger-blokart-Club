@@ -2,4 +2,9 @@
 <locations>
    <location name="MATC Lot" lat="43.12274" lng="-89.33206" mapCtrLat="43.12178" mapCtrLng="-89.3325" zoom="17" />
    <location name="DMV Lot" lat="43.07407" lng="-89.45797" zoom="18" />
+   <location name="Cub Lot" lat="43.03410" lng="-89.45851" zoom="18" />
+   <location name="UW Health Lot" lat="43.10335" lng="-89.52278" zoom="18" />
+   <location name="Costco Lot" lat="43.10094" lng="-89.52262" zoom="18" />
+   <location name="Edgerton Lot" lat="42.83733" lng="-89.08878" zoom="17" />
+   <location name="WPS Lot" lat="43.04494" lng="-89.34380" zoom="18" />
 </locations>

@@ -1,6 +1,6 @@
 function initialize() {
-   var resetCenter = new google.maps.LatLng(43.09, -89.405);
-   var resetZoom = 11;
+   var resetCenter = new google.maps.LatLng(43.029, -89.37);
+   var resetZoom = 10;
    var resetAction = function (event) {
          map.setCenter(resetCenter);
          map.setZoom(resetZoom);
