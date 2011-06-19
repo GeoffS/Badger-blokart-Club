@@ -7,7 +7,14 @@ function initialize() {
          return false;
    }
 
-   xmlhttp = new XMLHttpRequest();
+   if (window.XMLHttpRequest)
+   {// code for IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+   }
+   else
+   {// code for IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+   }
    xmlhttp.open("GET", "http://badgerblokartclub.org/Locations/Locations.xml", false);
    xmlhttp.send();
    locationsXmlDoc = xmlhttp.responseXML;
@@ -31,8 +38,13 @@ function initialize() {
    var resetLink = document.getElementById("resetLink");
    resetLink.onclick = resetAction;
 
-   for each(var item in locations) processLocationXml(item);
-
+   //for each(var item in locations) processLocationXml(item);
+   var len=locations.length;
+   for(var i=0; i<len; i++) {
+   	var item = locations[i];
+   	processLocationXml(item);
+   }
+   
    function processLocationXml(item) {
       var attributes = item.attributes;
       
