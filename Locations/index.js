@@ -4,14 +4,18 @@ function initialize() {
    var initLocId=getLocationFromURL();
    
    var htmlTitle = document.title;
+   var areaTitle = "Region View";
    
    var resetCenter = new google.maps.LatLng(43.029, -89.37);
    var resetZoom = 10;
+   
    var resetAction = function (event) {
          map.setCenter(resetCenter);
          map.setZoom(resetZoom);
          document.title = htmlTitle;
          window.location.hash = null;
+         setMapTitle(areaTitle);
+         resetLink.href = basePath+"#";
          return false;
    };
    
@@ -63,11 +67,12 @@ function initialize() {
 
    var resetLink = document.getElementById("resetLink");
    resetLink.onclick = resetAction;
+   resetLink.href = basePath+"#";
    
    // Null-Object pattern.
    // Action to perform if there is no initLoc from the URL.
    var initLoc = {
-      action: function doNothing(event){ return false;}
+      action: resetAction
    };
 
    var len=locations.length;
@@ -141,6 +146,7 @@ function initialize() {
          map.setZoom(zoom);
          document.title = htmlTitle+": "+location.name;
          window.location.hash = location.id;
+         setMapTitle(location.name);
          return false;
       }
    }
@@ -166,5 +172,10 @@ function initialize() {
          var query = window.location.href;
          var vars = query.split("#");
          return vars[0];
+   }
+   
+   function setMapTitle(title) {
+      var mapTitle = document.getElementById("mapTitle");
+      mapTitle.innerHTML = title+":";
    }
 }
