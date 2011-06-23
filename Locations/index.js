@@ -36,13 +36,13 @@ function initialize() {
    catch(e) {
       alert("Can't Load File From Host - using built-in locations list.");
       var txt='<locations>';
-      txt=txt+'   <location id="matc" name="MATC Lot" lat="43.12274" lng="-89.33206" mapCtrLat="43.12178" mapCtrLng="-89.3325" zoom="17" />';
-      txt=txt+'   <location id="dmv" name="DMV Lot" lat="43.07407" lng="-89.45797" zoom="18" />';
-      txt=txt+'   <location id="cub" name="Cub Lot" lat="43.03410" lng="-89.45851" zoom="18" />';
-      txt=txt+'   <location id="uw" name="UW Health Lot" lat="43.10335" lng="-89.52278" zoom="18" />';
-      txt=txt+'   <location id="costco" name="Costco Lot" lat="43.10094" lng="-89.52262" zoom="18" />';
-      txt=txt+'   <location id="edgerton" name="Edgerton Lot" lat="42.83733" lng="-89.08878" zoom="17" />';
-      txt=txt+'   <location id="wps" name="WPS Lot" lat="43.04494" lng="-89.34380" zoom="18" />';
+      txt=txt+'   <location id="matc" name="MATC Lot" latLng="43.12274, -89.33206" mapCtrLatLng="43.12178, -89.3325" zoom="17" />';
+      txt=txt+'   <location id="dmv" name="DMV Lot" latLng="43.07407, -89.45797" zoom="18" />';
+      txt=txt+'   <location id="cub" name="Cub Lot" latLng="43.03410, -89.45851" zoom="18" />';
+      txt=txt+'   <location id="uw" name="UW Health Lot" latLng="43.10335, -89.52278" mapCtrLatLng="43.1027, -89.52245" zoom="18" />';
+      txt=txt+'   <location id="costco" name="Costco Lot" latLng="43.10094, -89.52262" zoom="18" />';
+      txt=txt+'   <location id="edgerton" name="Edgerton Lot" latLng="42.83733, -89.08878" zoom="17" />';
+      txt=txt+'   <location id="wps" name="WPS Lot" latLng="43.04494, -89.34380" zoom="18" />';
       txt=txt+'</locations>';
       
       parser=new DOMParser();
@@ -92,22 +92,15 @@ function initialize() {
       
       var id = attributes.getNamedItem("id").value;
       var name = attributes.getNamedItem("name").value;
-      var lat  = parseFloat(attributes.getNamedItem("lat").value);
-      var lng  = parseFloat(attributes.getNamedItem("lng").value);
-      var mapCtrLat = attributes.getNamedItem("mapCtrLat");
-      if(mapCtrLat != null){
-         mapCtrLat = parseFloat(mapCtrLat.value);
+      var latLng = makeLatLng(attributes.getNamedItem("latLng").value);
+      var mapCtrLatLngElm  = attributes.getNamedItem("mapCtrLatLng");
+      if(mapCtrLatLngElm != null){
+         mapCtrLatLng = makeLatLng(mapCtrLatLngElm.value);
       } else {
-         mapCtrLat = lat;
-      }
-      var mapCtrLng = attributes.getNamedItem("mapCtrLng");
-      if(mapCtrLng != null){
-         mapCtrLng = parseFloat(mapCtrLng.value);
-      } else {
-         mapCtrLng = lng;
+         mapCtrLatLng = latLng;
       }
       var zoom = parseInt(attributes.getNamedItem("zoom").value);
-      var loc = new Location(id, name, lat, lng, mapCtrLat, mapCtrLng, zoom);
+      var loc = new Location(id, name, latLng, mapCtrLatLng, zoom);
       
       add_li(loc);
       makeMarker(loc, map);
@@ -116,12 +109,18 @@ function initialize() {
          initLoc = loc;
       }
    };
+   
+   function makeLatLng( latLngStr ) {
+      latLngArr = latLngStr.split(',');
+      var latLng = new google.maps.LatLng(parseFloat(latLngArr[0]), parseFloat(latLngArr[1]));
+      return latLng;
+   }
 
-   function Location(id, name, lat, lng, mapCtrLat, mapCtrLng, zoom) {
+   function Location(id, name, latLng, mapCtrLatLng, zoom) {
       this.id = id;
       this.name = name;
-      this.latlng = new google.maps.LatLng(lat, lng);
-      this.mapCtr = new google.maps.LatLng(mapCtrLat, mapCtrLng);
+      this.latlng = latLng;
+      this.mapCtr = mapCtrLatLng;
       this.zoom = zoom;
       this.path = basePath+"#"+this.id;
       this.action = makeLocationAction(this);
