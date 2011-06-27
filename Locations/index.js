@@ -19,7 +19,7 @@ function initialize() {
       locationsXmlDoc = xmlhttp.responseXML;
    }
    catch(e) {
-      //alert("WARNING: Can't Load File From Host - using built-in locations list.");
+      alert("WARNING: Can't Load File From Host - using built-in locations list.");
       var txt='<regions>';
       txt=txt+'   <region id="bbc" name="Badger blokart® Club" latLng="43.029, -89.37" zoom="10" >';
       txt=txt+'      <locations>';
@@ -73,7 +73,6 @@ function initialize() {
    	var loc = region.locations[i];
    	
    	updateInitLoc(loc);
-   	add_li(loc);
 	add_sel(i, loc);
         makeMarker(loc, map);
    }
@@ -179,17 +178,6 @@ function initialize() {
       a.setAttribute('href', location.path);
       a.onclick = location.action;
       a.innerHTML = location.name;
-   }
-
-   function add_li(location) {
-      var list = document.getElementById("locationList");
-
-      var a = document.createElement('a');
-      modifyLocationLink(a, location);
-
-      var li = document.createElement("li");
-      li.insertBefore(a, null);
-      list.appendChild(li);
    }
    
    function initSelector(region) {
