@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <regions>
-   <region id="bbc" name="Badger blokart® Club" latLng="43.029, -89.37" zoom="10" >
+   <region id="bbc" name="Badger blokart Club" latLng="43.029, -89.37" zoom="10" >
       <locations>
          <location id="matc" name="MATC Lot" latLng="43.12274, -89.33206" mapCtrLatLng="43.12178, -89.3325" zoom="17" />
          <location id="dmv" name="DMV Lot" latLng="43.07407, -89.45797" zoom="18" />
