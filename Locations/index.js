@@ -2,6 +2,7 @@ function initialize() {
    var baseURL = getBaseURL();
    var basePath = window.location.pathname;
    var initLocId=getLocationFromURL();
+   var selector = document.getElementById("locationSelect")
    
    if (window.XMLHttpRequest)
    {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -18,7 +19,7 @@ function initialize() {
       locationsXmlDoc = xmlhttp.responseXML;
    }
    catch(e) {
-      alert("WARNING: Can't Load File From Host - using built-in locations list.");
+      //alert("WARNING: Can't Load File From Host - using built-in locations list.");
       var txt='<regions>';
       txt=txt+'   <region id="bbc" name="Badger blokart® Club" latLng="43.029, -89.37" zoom="10" >';
       txt=txt+'      <locations>';
@@ -43,8 +44,18 @@ function initialize() {
 
    var map = makeMap();
    
-   var region = makeLocationFromXml(null, regionElem);
-
+   var region = makeLocationFromXml(null, regionElem, 0);
+   
+   var len=locationElems.length;
+   var locations = new Array(len);
+   for(var i=0; i<len; i++) {
+      var item = locationElems[i];
+      var loc = makeLocationFromXml(region, item, i+1);
+      locations[i] = loc;
+   }
+   
+   region.locations = locations;
+   
    var resetLink = document.getElementById("resetLink");
    modifyLocationLink(resetLink, region);
    resetLink.innerHTML = resetLink.innerHTML+" Area:";
@@ -56,12 +67,15 @@ function initialize() {
       action: region.action
    };
 
-   var len=locationElems.length;
+   initSelector(region);
+   var len = region.locations.length;
    for(var i=0; i<len; i++) {
-   	var item = locationElems[i];
-   	var loc = makeLocationFromXml(region, item)
-   	processLocation(loc, map);
+   	var loc = region.locations[i];
+   	
    	updateInitLoc(loc);
+   	add_li(loc);
+	add_sel(i, loc);
+        makeMarker(loc, map);
    }
    initLoc.action();
    
@@ -84,7 +98,7 @@ function initialize() {
       return new google.maps.Map(document.getElementById("map_canvas"), myOptions);
    }
    
-   function makeLocationFromXml(region, item){
+   function makeLocationFromXml(region, item, selectorIndex){
       var attributes = item.attributes;
       
       var id = attributes.getNamedItem("id").value;
@@ -97,12 +111,7 @@ function initialize() {
          mapCtrLatLng = latLng;
       }
       var zoom = parseInt(attributes.getNamedItem("zoom").value);
-      return new Location(region, id, name, latLng, mapCtrLatLng, zoom);
-   };
-      
-   function processLocation(loc, map) {
-      add_li(loc);
-      makeMarker(loc, map);
+      return new Location(region, id, name, latLng, mapCtrLatLng, zoom, selectorIndex);
    };
       
    // Side-Effect Warning: Updates global var initLoc!
@@ -118,11 +127,12 @@ function initialize() {
       return latLng;
    }
 
-   function Location(region, id, name, latLng, mapCtrLatLng, zoom) {
+   function Location(region, id, name, latLng, mapCtrLatLng, zoom, selectorIndex) {
       this.name = name;
       this.latlng = latLng;
       this.mapCtr = mapCtrLatLng;
       this.zoom = zoom;
+      this.selectorIndex = selectorIndex;
       
       this.region = region;
       
@@ -160,6 +170,7 @@ function initialize() {
          document.title = location.title;
          window.location.hash = location.id;
          setMapTitle(location.name);
+         selector.selectedIndex = location.selectorIndex;
          return false;
       }
    }
@@ -179,6 +190,26 @@ function initialize() {
       var li = document.createElement("li");
       li.insertBefore(a, null);
       list.appendChild(li);
+   }
+   
+   function initSelector(region) {
+      var numOptions = locations.length+1;
+      selector.options = new Array(numOptions);
+      selector.actions = new Array(numOptions);
+      
+      selector.options[0] = new Option("Select a Location");
+      selector.actions[0] = region.action;
+      
+      selector.onchange = function() {
+         this.actions[this.selectedIndex]();
+      };
+   }
+   
+   function add_sel(index, location) {
+      var opt = document.createElement('option');
+      opt.text = location.name;
+      selector.options[index+1] = opt;
+      selector.actions[index+1] = location.action;
    }
    
    function getLocationFromURL(){
