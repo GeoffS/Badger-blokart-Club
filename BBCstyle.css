@@ -36,7 +36,11 @@ img.facebookLogo {
    border-width:0;
    margin-bottom:-2px;
 }
-
+img.thumbnail {
+   vertical-align:top;
+   padding-right: 5px;
+   float: left;
+}
 p.topTitle {
    width:80%;
    padding:5px;
@@ -51,6 +55,18 @@ p.topTitle {
    border:5px;
    border-style:solid;
    border-color:#600101;
+}
+h2.photoHeading {
+   margin-left: 10%;
+   text-align:left;
+}
+p.photoAlbum {
+   font-size: 10pt;
+   margin-left: 15%;
+   text-align:left;
+   padding-top:15px;;
+   font-weight:bold;
+   clear: both;
 }
 a:link {
    text-decoration: underline; 
@@ -109,7 +125,7 @@ a.fb:visited {
 }
 .sponsorFooter {
    margin-top:10px;
-   margin-bottom:10px;
+   padding-bottom:7px;
    text-align: center;
    font-size:8pt;
    color: #000000;
