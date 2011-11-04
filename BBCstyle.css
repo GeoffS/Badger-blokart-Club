@@ -40,6 +40,9 @@ img.thumbnail {
    vertical-align:top;
    padding-right: 5px;
    float: left;
+   border-style: solid;
+   border-color: #600101;
+   border-width: 5px;
 }
 p.topTitle {
    width:80%;
@@ -56,11 +59,18 @@ p.topTitle {
    border-style:solid;
    border-color:#600101;
 }
-h2.photoHeading {
+p.photoHeading {
+   font-size: 18pt;
+   font-weight: bold;
    margin-left: 10%;
    text-align:left;
 }
-p.photoAlbum {
+table.photoAlbums {
+   width: 700px;
+   margin-left: 15px;
+}
+td.photoAlbum {
+   width: 50%;
    font-size: 10pt;
    margin-left: 15%;
    text-align:left;
