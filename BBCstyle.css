@@ -38,7 +38,7 @@ img.facebookLogo {
 }
 img.thumbnail {
    vertical-align:top;
-   padding-right: 5px;
+   margin-right: 5px;
    float: left;
    border-style: solid;
    border-color: #600101;
@@ -67,7 +67,7 @@ p.photoHeading {
 }
 table.photoAlbums {
    width: 700px;
-   margin-left: 15px;
+   margin-left: 15%;
 }
 td.photoAlbum {
    width: 50%;
