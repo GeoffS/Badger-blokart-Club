@@ -1,0 +1,909 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+	<head>
+		<title>Map created by GPS Visualizer</title>
+		<base target="_top"></base>
+		<meta name="geo.position" content="42.6245325; -88.6187815" />
+		<meta name="ICBM" content="42.6245325, -88.6187815" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+	<body onunload="GUnload();" style="margin:0px;">
+		<script type="text/javascript">
+			// If you put this map on another Web site, you must include your API key or nothing will work!
+			var google_api_key = 'ABQIAAAAg75m1KaJI_1rKeTbY2WX5xRhwFLE-KhjQGaLaPhee_WdfUbL2BRsXsM7IeYMCRU88bFsx6rd3c0PTQ'; // Your key goes on THIS line; the following line ("if window.location.host...") can be removed.
+			if (window.location.host == 'www.gpsvisualizer.com') { google_api_key = 'ABQIAAAAaG9JDbCe6Ra1Og0hKCn2LRRokW_ItEImBo7ewbVEJAzstSsRWhRJ3RMDAWpL55QacGZ2zQF2kLC_eA'; }
+
+			document.writeln('<script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key='+google_api_key+'" type="text/javascript"><'+'/'+'script>');
+		</script>
+
+		<!--
+			If you want to transplant this map into another Web page, by far the best method is to
+			simply include it in a IFRAME tag (see http://www.gpsvisualizer.com/faq.html#google_html).
+			But, if you must paste the code into another page, be sure to include all of these parts:
+			   1. The DOCTYPE declaration and the extra attributes in the "html" tag (xmlns:v=...)
+			     that allow Internet Explorer for Windows to render polylines (tracks)
+			   2. The "div" tags that contain the map and its widgets (below this comment)
+			   3. Three sections of JavaScript code:
+			      a. Your Google Maps API key and the maps.google.com code (above this comment)
+			      b. "gv_options" and the code that calls "functions.js" on maps.gpsvisualizer.com
+			      c. The "GV_Map" function, which contains all the geographic info for the map
+		-->
+		<div style="margin-left:0px; margin-right:0px; margin-top:0px; margin-bottom:0px;">
+			<div id="gmap_div" style="width:800px; height:760px; margin:0px; margin-right:12px; background-color:#F0F0F0; float:left; overflow:hidden;">
+				<p align="center" style="font:10px Arial;">This map was created using <a target="_blank" href="http://www.gpsvisualizer.com/">GPS Visualizer</a>'s do-it-yourself geographic utilities.<br /><br />Please wait while the map data loads...</p>
+			</div>
+
+			<div id="gv_legend_container" style="display:none;"><table id="gv_legend_table" style="position:relative; filter:alpha(opacity=95); -moz-opacity:0.95; opacity:0.95; background:#ffffff;" cellpadding="0" cellspacing="0" border="0"><tr><td><div id="gv_legend_handle" align="center" style="height:6px; max-height:6px; background:#CCCCCC; border-left:1px solid #999999; border-top:1px solid #EEEEEE; border-right:1px solid #999999; padding:0px; cursor:move;"><!-- --></div>
+				<div id="gv_legend" align="left" style="line-height:13px; border:solid #000000 1px; background:#FFFFFF; padding:4px;font:11px Arial; ">
+						<div id="gv_legend_header" style="padding-bottom:2px;"><b>Speed [est.] (mph)</b></div>
+						<div class="gv_legend_item"><span style="color:#E600E6;">&#9608; 26.0</span></div>
+						<div class="gv_legend_item"><span style="color:#7500E6;">&#9608; 24.0</span></div>
+						<div class="gv_legend_item"><span style="color:#0000E6;">&#9608; 22.0</span></div>
+						<div class="gv_legend_item"><span style="color:#0071E6;">&#9608; 20.0</span></div>
+						<div class="gv_legend_item"><span style="color:#00E6E6;">&#9608; 18.0</span></div>
+						<div class="gv_legend_item"><span style="color:#00E675;">&#9608; 16.0</span></div>
+						<div class="gv_legend_item"><span style="color:#00E600;">&#9608; 14.0</span></div>
+						<div class="gv_legend_item"><span style="color:#71E600;">&#9608; 12.0</span></div>
+						<div class="gv_legend_item"><span style="color:#E6E600;">&#9608; 10.0</span></div>
+						<div class="gv_legend_item"><span style="color:#E67500;">&#9608; 8.0</span></div>
+						<div class="gv_legend_item"><span style="color:#E60000;">&#9608; 6.0</span></div>
+				</div>
+			</td></tr></table></div>
+
+
+			<div id="gv_tracklist_container" style="display:none;"><table id="gv_tracklist_table" style="position:relative; filter:alpha(opacity=95); -moz-opacity:0.95; opacity:0.95;" cellpadding="0" cellspacing="0" border="0"><tr><td><div id="gv_tracklist_handle" align="center" style="height:6px; max-height:6px; background:#CCCCCC; border-left:1px solid #999999; border-top:1px solid #EEEEEE; border-right:1px solid #999999; padding:0px; cursor:move; min-width:40px;"><!-- --></div>
+				<div id="gv_tracklist" align="left" style="font:11px Arial; line-height:11px; border:solid #666666 1px; background:#FFFFFF; padding:4px; overflow:auto;">
+					<div id="gv_tracklist_header" style="padding-bottom:2px; color:#000000;"><b>Tracks:</b></div>
+					<div id="gv_tracklist_links" style="color:#000000;"></div>
+				</div>
+			</td></tr></table></div>
+			<div id="gv_tracklist_tooltip" class="gv_tracklist_tooltip" style="background-color:#FFFFFF; border:1px solid #CCCCCC; padding:2px; font:11px Arial; display:none;"></div>
+
+			<div id="gv_clear_margins" style="height:0px; clear:both;"><!-- clear the "float" --></div>
+		</div>
+
+
+		<!-- begin GPS Visualizer setup script (must come after maps.google.com code) -->
+		<script type="text/javascript">
+			/* Global variables used by the GPS Visualizer functions (1320692665): */
+			gv_options = [];
+				// important variable names:
+				gv_options.map_div = 'gmap_div';  // the name of the HTML "div" tag containing the map itself; usually 'gmap_div'
+
+				// basic map parameters:
+				gv_options.width = 800;  // width of the map, in pixels
+				gv_options.height = 760;  // height of the map, in pixels
+				gv_options.full_screen = false;  // true|false: should the map fill the entire page (or frame)?
+				gv_options.center = [42.6245325,-88.6187815];  // [latitude,longitude] - be sure to keep the square brackets
+				gv_options.zoom = 18;  // higher number means closer view; can also be 'auto'
+				gv_options.map_opacity = 1;  // number from 0 to 1
+				gv_options.map_type = 'G_HYBRID_MAP';  // popular map_type choices are 'G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_PHYSICAL_MAP', 'MYTOPO_TILES'
+				gv_options.doubleclick_zoom = true;  // true|false: zoom in when mouse is double-clicked?
+				gv_options.mousewheel_zoom = false; // true|false; or 'reverse' for down=in and up=out
+				gv_options.centering_options = { 'open_info_window':true, 'partial_match':true, 'center_key':'center', 'default_zoom':null } // URL-based centering (e.g., ?center=name_of_marker&zoom=14)
+
+				// widgets on the map:
+				gv_options.zoom_control = 'large'; // 'large'|'small'|'3d'
+				gv_options.scale_control = true; // true|false
+				gv_options.center_coordinates = false;  // true|false: show a "center coordinates" box and crosshair?
+				gv_options.crosshair_hidden = true;  // true|false: hide the crosshair initially?
+				gv_options.map_opacity_control = true;  // true|false
+				gv_options.map_type_control = [];  // widget to change the background map
+				  gv_options.map_type_control.style = 'menu';  // 'menu'|'list'|'none'|'google'
+				  gv_options.map_type_control.filter = true;  // true|false: when map loads, are irrelevant maps ignored?
+				  gv_options.map_type_control.excluded = ['G_SATELLITE_3D_MAP'];  // comma-separated list of map types that will never show in the list ('included' also works)
+				gv_options.legend_options = []; // options for a floating legend box (id="gv_legend"), which can contain anything
+				  gv_options.legend_options.legend = true;  // true|false: enable or disable the legend altogether
+				  gv_options.legend_options.position = ['G_ANCHOR_BOTTOM_RIGHT',200,100];  // [Google anchor name, relative x, relative y]
+				  gv_options.legend_options.draggable = true;  // true|false: can it be moved around the screen?
+				  gv_options.legend_options.collapsible = true;  // true|false: can it be collapsed by double-clicking its top bar?
+				gv_options.measurement_tools = { visible:false, distance_color:'', area_color:'', position:[] };
+
+				// track-related options:
+				gv_options.tracklist_options = []; // options for a floating list of the tracks visible on the map
+				  gv_options.tracklist_options.tracklist = true;  // true|false: enable or disable the tracklist altogether
+				  gv_options.tracklist_options.position = ['G_ANCHOR_TOP_RIGHT',6,32];  // [Google anchor name, relative x, relative y]
+				  gv_options.tracklist_options.max_width = 180; // maximum width of the tracklist, in pixels
+				  gv_options.tracklist_options.max_height = 670; // maximum height of the tracklist, in pixels; if the list is longer, scrollbars will appear
+				  gv_options.tracklist_options.desc = true;  // true|false: should tracks' descriptions be shown in the list
+				  gv_options.tracklist_options.zoom_links = true;  // true|false: should each item include a small icon that will zoom to that track?
+				  gv_options.tracklist_options.tooltips = true;  // true|false: should the name of the track appear on the map when you mouse over the name in the list?
+				  gv_options.tracklist_options.draggable = true;  // true|false: can it be moved around the screen?
+				  gv_options.tracklist_options.collapsible = true;  // true|false: can it be collapsed by double-clicking its top bar?
+
+				// marker-related options:
+				gv_options.default_marker = { color:'red',icon:'googlemini' }; // icon can be a URL, but be sure to also include size:[w,h] and optionally anchor:[x,y]
+				gv_options.shadows = true; // true|false: do the standard markers have "shadows" behind them?
+				gv_options.marker_link_target = '_blank'; // the name of the window or frame into which markers' URLs will load
+				gv_options.info_window_width = 0;  // in pixels, the width of the markers' pop-up info "bubbles" (can be overridden by 'window_width' in individual markers)
+				gv_options.thumbnail_width = 0;  // in pixels, the width of the markers' thumbnails (can be overridden by 'thumbnail_width' in individual markers)
+				gv_options.photo_size = [0,0];  // in pixels, the size of the photos in info windows (can be overridden by 'photo_width' or 'photo_size' in individual markers)
+				gv_options.hide_labels = false;  // true|false: hide labels when map first loads?
+				gv_options.label_offset = [0,0];  // [x,y]: shift all markers' labels (positive numbers are right and down)
+				gv_options.label_centered = false;  // true|false: center labels with respect to their markers?  (label_left is also a valid option.)
+				gv_options.driving_directions = false;  // put a small "driving directions" form in each marker's pop-up window? (override with dd:true or dd:false in a marker's options)
+				gv_options.garmin_icon_set = 'gpsmap'; // 'gpsmap' are the small 16x16 icons; change it to '24x24' for larger icons
+
+
+			// Load GPS Visualizer's Google Maps functions (this must be loaded AFTER gv_options are set):
+			document.writeln('<script src="http://maps.gpsvisualizer.com/google_maps/functions.js" type="text/javascript"><'+'/'+'script>');
+		</script>
+
+		<style type="text/css">
+			/* Put any custom style definitions here (e.g., .gv_marker_info_window, .gv_marker_list_item, .gv_tooltip, .gv_label, etc.) */
+			.gv_label {
+				filter:alpha(opacity=80); -moz-opacity:0.8; opacity:0.8;
+				background:#333333; border:1px solid black; padding:1px;
+				font:9px Verdana,sans-serif; color:white; font-weight:normal;
+			}
+
+		</style>
+
+		<!-- end GPSV setup script and styles; begin map-drawing script (they must be separate) -->
+		<script type="text/javascript">
+			function GV_Map() {
+				if (GBrowserIsCompatible()) {
+					if (gv_options.full_screen) { GV_Fill_Window_With_Map(gv_options.map_div); }
+					gmap = new GMap2(document.getElementById(gv_options.map_div)); // create map
+					GV_Setup_Map(gv_options);
+
+					// Track #1 ("Race-1")
+					t = 1; trk_info[t] = [];
+					trk_info[t]['name'] = 'Race-1'; trk_info[t]['desc'] = ''; trk_info[t]['clickable'] = true;
+					trk_info[t]['color'] = '#E60000'; trk_info[t]['width'] = 3; trk_info[t]['opacity'] = 0.9;
+					trk_info[t]['outline_color'] = '#000000'; trk_info[t]['outline_width'] = 0; trk_info[t]['fill_color'] = '#E60000'; trk_info[t]['fill_opacity'] = 0;
+					trk_segments[t] = [];
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625185,-88.616977], [42.625182,-88.616975] ] }); // track 1 segment 1
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625182,-88.616975], [42.625184,-88.616971] ] }); // track 1 segment 2
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625184,-88.616971], [42.625186,-88.616984] ] }); // track 1 segment 3
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625186,-88.616984], [42.625188,-88.617001] ] }); // track 1 segment 4
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625188,-88.617001], [42.625204,-88.617005] ] }); // track 1 segment 5
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625204,-88.617005], [42.625207,-88.617021] ] }); // track 1 segment 6
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625207,-88.617021], [42.62521,-88.61702] ] }); // track 1 segment 7
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.62521,-88.61702], [42.625205,-88.617024] ] }); // track 1 segment 8
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625205,-88.617024], [42.625207,-88.617026] ] }); // track 1 segment 9
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625207,-88.617026], [42.625198,-88.617029] ] }); // track 1 segment 10
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625198,-88.617029], [42.625196,-88.617049] ] }); // track 1 segment 11
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625196,-88.617049], [42.625186,-88.617067] ] }); // track 1 segment 12
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625186,-88.617067], [42.625176,-88.6171] ] }); // track 1 segment 13
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625176,-88.6171], [42.625164,-88.61716] ] }); // track 1 segment 14
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625164,-88.61716], [42.625174,-88.617216] ] }); // track 1 segment 15
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625174,-88.617216], [42.625171,-88.61724] ] }); // track 1 segment 16
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625171,-88.61724], [42.625181,-88.617267] ] }); // track 1 segment 17
+					trk_segments[t].push({ color:'#E62D00', points:[ [42.625181,-88.617267], [42.625183,-88.617304] ] }); // track 1 segment 18
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625183,-88.617304], [42.625184,-88.617325] ] }); // track 1 segment 19
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625184,-88.617325], [42.625178,-88.617346] ] }); // track 1 segment 20
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625178,-88.617346], [42.625172,-88.617369] ] }); // track 1 segment 21
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625172,-88.617369], [42.625164,-88.617382] ] }); // track 1 segment 22
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625164,-88.617382], [42.625162,-88.617405] ] }); // track 1 segment 23
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625162,-88.617405], [42.625161,-88.617414] ] }); // track 1 segment 24
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625161,-88.617414], [42.625154,-88.617435] ] }); // track 1 segment 25
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625154,-88.617435], [42.625153,-88.617449] ] }); // track 1 segment 26
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625153,-88.617449], [42.625158,-88.617474] ] }); // track 1 segment 27
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625158,-88.617474], [42.625166,-88.617502] ] }); // track 1 segment 28
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625166,-88.617502], [42.625177,-88.617526] ] }); // track 1 segment 29
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625177,-88.617526], [42.625194,-88.617537] ] }); // track 1 segment 30
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625194,-88.617537], [42.625211,-88.617542] ] }); // track 1 segment 31
+					trk_segments[t].push({ color:'#00E629', points:[ [42.625211,-88.617542], [42.625264,-88.617578] ] }); // track 1 segment 32
+					trk_segments[t].push({ color:'#E1E600', points:[ [42.625264,-88.617578], [42.625296,-88.617612] ] }); // track 1 segment 33
+					trk_segments[t].push({ color:'#48E600', points:[ [42.625296,-88.617612], [42.625355,-88.617726] ] }); // track 1 segment 34
+					trk_segments[t].push({ color:'#6CE600', points:[ [42.625355,-88.617726], [42.625389,-88.61785] ] }); // track 1 segment 35
+					trk_segments[t].push({ color:'#00A6E6', points:[ [42.625389,-88.61785], [42.625383,-88.617954] ] }); // track 1 segment 36
+					trk_segments[t].push({ color:'#00E679', points:[ [42.625383,-88.617954], [42.625382,-88.618042] ] }); // track 1 segment 37
+					trk_segments[t].push({ color:'#00E663', points:[ [42.625382,-88.618042], [42.625384,-88.618128] ] }); // track 1 segment 38
+					trk_segments[t].push({ color:'#00CFE6', points:[ [42.625384,-88.618128], [42.625365,-88.618225] ] }); // track 1 segment 39
+					trk_segments[t].push({ color:'#0082E6', points:[ [42.625365,-88.618225], [42.625354,-88.618332] ] }); // track 1 segment 40
+					trk_segments[t].push({ color:'#001BE6', points:[ [42.625354,-88.618332], [42.62533,-88.618445] ] }); // track 1 segment 41
+					trk_segments[t].push({ color:'#0082E6', points:[ [42.62533,-88.618445], [42.625309,-88.618549] ] }); // track 1 segment 42
+					trk_segments[t].push({ color:'#0012E6', points:[ [42.625309,-88.618549], [42.625285,-88.618663] ] }); // track 1 segment 43
+					trk_segments[t].push({ color:'#00C6E6', points:[ [42.625285,-88.618663], [42.625252,-88.618754] ] }); // track 1 segment 44
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.625252,-88.618754], [42.625219,-88.618847] ] }); // track 1 segment 45
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.625219,-88.618847], [42.62518,-88.618924] ] }); // track 1 segment 46
+					trk_segments[t].push({ color:'#0079E6', points:[ [42.62518,-88.618924], [42.625133,-88.619012] ] }); // track 1 segment 47
+					trk_segments[t].push({ color:'#00E66C', points:[ [42.625133,-88.619012], [42.625102,-88.619088] ] }); // track 1 segment 48
+					trk_segments[t].push({ color:'#00E6D8', points:[ [42.625102,-88.619088], [42.62507,-88.619175] ] }); // track 1 segment 49
+					trk_segments[t].push({ color:'#00BDE6', points:[ [42.62507,-88.619175], [42.625036,-88.619266] ] }); // track 1 segment 50
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.625036,-88.619266], [42.625005,-88.619355] ] }); // track 1 segment 51
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.625005,-88.619355], [42.62497,-88.619442] ] }); // track 1 segment 52
+					trk_segments[t].push({ color:'#1B00E6', points:[ [42.62497,-88.619442], [42.62494,-88.619558] ] }); // track 1 segment 53
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.62494,-88.619558], [42.624886,-88.619733] ] }); // track 1 segment 54
+					trk_segments[t].push({ color:'#00CFE6', points:[ [42.624886,-88.619733], [42.624842,-88.619925] ] }); // track 1 segment 55
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.624842,-88.619925], [42.62477,-88.620111] ] }); // track 1 segment 56
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.62477,-88.620111], [42.624739,-88.620205] ] }); // track 1 segment 57
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.624739,-88.620205], [42.624707,-88.620291] ] }); // track 1 segment 58
+					trk_segments[t].push({ color:'#00CAE6', points:[ [42.624707,-88.620291], [42.62466,-88.620369] ] }); // track 1 segment 59
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.62466,-88.620369], [42.624604,-88.620425] ] }); // track 1 segment 60
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.624604,-88.620425], [42.624549,-88.62046] ] }); // track 1 segment 61
+					trk_segments[t].push({ color:'#04E600', points:[ [42.624549,-88.62046], [42.624493,-88.620456] ] }); // track 1 segment 62
+					trk_segments[t].push({ color:'#E6C600', points:[ [42.624493,-88.620456], [42.624456,-88.620444] ] }); // track 1 segment 63
+					trk_segments[t].push({ color:'#00E65A', points:[ [42.624456,-88.620444], [42.624401,-88.620403] ] }); // track 1 segment 64
+					trk_segments[t].push({ color:'#D3E600', points:[ [42.624401,-88.620403], [42.624369,-88.620367] ] }); // track 1 segment 65
+					trk_segments[t].push({ color:'#00E604', points:[ [42.624369,-88.620367], [42.624322,-88.620324] ] }); // track 1 segment 66
+					trk_segments[t].push({ color:'#A2E600', points:[ [42.624322,-88.620324], [42.624283,-88.620294] ] }); // track 1 segment 67
+					trk_segments[t].push({ color:'#E6E100', points:[ [42.624283,-88.620294], [42.624256,-88.620254] ] }); // track 1 segment 68
+					trk_segments[t].push({ color:'#71E600', points:[ [42.624256,-88.620254], [42.624214,-88.620221] ] }); // track 1 segment 69
+					trk_segments[t].push({ color:'#3BE600', points:[ [42.624214,-88.620221], [42.624172,-88.620179] ] }); // track 1 segment 70
+					trk_segments[t].push({ color:'#CBE600', points:[ [42.624172,-88.620179], [42.624153,-88.620128] ] }); // track 1 segment 71
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.624153,-88.620128], [42.624104,-88.62006] ] }); // track 1 segment 72
+					trk_segments[t].push({ color:'#87E600', points:[ [42.624104,-88.62006], [42.624078,-88.620007] ] }); // track 1 segment 73
+					trk_segments[t].push({ color:'#E67500', points:[ [42.624078,-88.620007], [42.624056,-88.619975] ] }); // track 1 segment 74
+					trk_segments[t].push({ color:'#87E600', points:[ [42.624056,-88.619975], [42.624023,-88.61993] ] }); // track 1 segment 75
+					trk_segments[t].push({ color:'#90E600', points:[ [42.624023,-88.61993], [42.623967,-88.61983] ] }); // track 1 segment 76
+					trk_segments[t].push({ color:'#29E600', points:[ [42.623967,-88.61983], [42.623892,-88.619726] ] }); // track 1 segment 77
+					trk_segments[t].push({ color:'#75E600', points:[ [42.623892,-88.619726], [42.623826,-88.619631] ] }); // track 1 segment 78
+					trk_segments[t].push({ color:'#3BE600', points:[ [42.623826,-88.619631], [42.623779,-88.6196] ] }); // track 1 segment 79
+					trk_segments[t].push({ color:'#E6C600', points:[ [42.623779,-88.6196], [42.623741,-88.619599] ] }); // track 1 segment 80
+					trk_segments[t].push({ color:'#DCE600', points:[ [42.623741,-88.619599], [42.62371,-88.619635] ] }); // track 1 segment 81
+					trk_segments[t].push({ color:'#E6B900', points:[ [42.62371,-88.619635], [42.623684,-88.619671] ] }); // track 1 segment 82
+					trk_segments[t].push({ color:'#E6D800', points:[ [42.623684,-88.619671], [42.623663,-88.619716] ] }); // track 1 segment 83
+					trk_segments[t].push({ color:'#5EE600', points:[ [42.623663,-88.619716], [42.623645,-88.619779] ] }); // track 1 segment 84
+					trk_segments[t].push({ color:'#99E600', points:[ [42.623645,-88.619779], [42.623634,-88.619839] ] }); // track 1 segment 85
+					trk_segments[t].push({ color:'#7EE600', points:[ [42.623634,-88.619839], [42.623628,-88.619903] ] }); // track 1 segment 86
+					trk_segments[t].push({ color:'#6CE600', points:[ [42.623628,-88.619903], [42.623619,-88.619968] ] }); // track 1 segment 87
+					trk_segments[t].push({ color:'#00E679', points:[ [42.623619,-88.619968], [42.623608,-88.620055] ] }); // track 1 segment 88
+					trk_segments[t].push({ color:'#00E687', points:[ [42.623608,-88.620055], [42.623601,-88.620144] ] }); // track 1 segment 89
+					trk_segments[t].push({ color:'#00E6A7', points:[ [42.623601,-88.620144], [42.623585,-88.620234] ] }); // track 1 segment 90
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.623585,-88.620234], [42.623559,-88.620312] ] }); // track 1 segment 91
+					trk_segments[t].push({ color:'#007EE6', points:[ [42.623559,-88.620312], [42.623497,-88.62038] ] }); // track 1 segment 92
+					trk_segments[t].push({ color:'#00E6E1', points:[ [42.623497,-88.62038], [42.623425,-88.620385] ] }); // track 1 segment 93
+					trk_segments[t].push({ color:'#90E600', points:[ [42.623425,-88.620385], [42.623379,-88.620389] ] }); // track 1 segment 94
+					trk_segments[t].push({ color:'#63E600', points:[ [42.623379,-88.620389], [42.623337,-88.620354] ] }); // track 1 segment 95
+					trk_segments[t].push({ color:'#00E61B', points:[ [42.623337,-88.620354], [42.623295,-88.620299] ] }); // track 1 segment 96
+					trk_segments[t].push({ color:'#4CE600', points:[ [42.623295,-88.620299], [42.623271,-88.620238] ] }); // track 1 segment 97
+					trk_segments[t].push({ color:'#B4E600', points:[ [42.623271,-88.620238], [42.623264,-88.62012] ] }); // track 1 segment 98
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.623264,-88.62012], [42.623307,-88.619964] ] }); // track 1 segment 99
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.623307,-88.619964], [42.623385,-88.619809] ] }); // track 1 segment 100
+					trk_segments[t].push({ color:'#00E600', points:[ [42.623385,-88.619809], [42.623424,-88.619754] ] }); // track 1 segment 101
+					trk_segments[t].push({ color:'#00E61B', points:[ [42.623424,-88.619754], [42.623458,-88.61969] ] }); // track 1 segment 102
+					trk_segments[t].push({ color:'#36E600', points:[ [42.623458,-88.61969], [42.623496,-88.619641] ] }); // track 1 segment 103
+					trk_segments[t].push({ color:'#00E636', points:[ [42.623496,-88.619641], [42.623554,-88.61962] ] }); // track 1 segment 104
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.623554,-88.61962], [42.623622,-88.61963] ] }); // track 1 segment 105
+					trk_segments[t].push({ color:'#E6CB00', points:[ [42.623622,-88.61963], [42.62366,-88.619636] ] }); // track 1 segment 106
+					trk_segments[t].push({ color:'#43E600', points:[ [42.62366,-88.619636], [42.623708,-88.619662] ] }); // track 1 segment 107
+					trk_segments[t].push({ color:'#75E600', points:[ [42.623708,-88.619662], [42.623751,-88.619691] ] }); // track 1 segment 108
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.623751,-88.619691], [42.623803,-88.619734] ] }); // track 1 segment 109
+					trk_segments[t].push({ color:'#00E624', points:[ [42.623803,-88.619734], [42.623854,-88.619774] ] }); // track 1 segment 110
+					trk_segments[t].push({ color:'#24E600', points:[ [42.623854,-88.619774], [42.6239,-88.619812] ] }); // track 1 segment 111
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.6239,-88.619812], [42.623961,-88.619857] ] }); // track 1 segment 112
+					trk_segments[t].push({ color:'#24E600', points:[ [42.623961,-88.619857], [42.62401,-88.619887] ] }); // track 1 segment 113
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.62401,-88.619887], [42.624072,-88.619901] ] }); // track 1 segment 114
+					trk_segments[t].push({ color:'#00E6A7', points:[ [42.624072,-88.619901], [42.62414,-88.619895] ] }); // track 1 segment 115
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.62414,-88.619895], [42.624198,-88.619846] ] }); // track 1 segment 116
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.624198,-88.619846], [42.624247,-88.619778] ] }); // track 1 segment 117
+					trk_segments[t].push({ color:'#0087E6', points:[ [42.624247,-88.619778], [42.624288,-88.619686] ] }); // track 1 segment 118
+					trk_segments[t].push({ color:'#0068E6', points:[ [42.624288,-88.619686], [42.62437,-88.619495] ] }); // track 1 segment 119
+					trk_segments[t].push({ color:'#00CAE6', points:[ [42.62437,-88.619495], [42.624444,-88.61932] ] }); // track 1 segment 120
+					trk_segments[t].push({ color:'#00BDE6', points:[ [42.624444,-88.61932], [42.624477,-88.619228] ] }); // track 1 segment 121
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.624477,-88.619228], [42.624514,-88.619127] ] }); // track 1 segment 122
+					trk_segments[t].push({ color:'#0087E6', points:[ [42.624514,-88.619127], [42.624555,-88.619035] ] }); // track 1 segment 123
+					trk_segments[t].push({ color:'#00E6D4', points:[ [42.624555,-88.619035], [42.624577,-88.618943] ] }); // track 1 segment 124
+					trk_segments[t].push({ color:'#006CE6', points:[ [42.624577,-88.618943], [42.624609,-88.618842] ] }); // track 1 segment 125
+					trk_segments[t].push({ color:'#00BDE6', points:[ [42.624609,-88.618842], [42.624645,-88.618752] ] }); // track 1 segment 126
+					trk_segments[t].push({ color:'#00A6E6', points:[ [42.624645,-88.618752], [42.624695,-88.618673] ] }); // track 1 segment 127
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.624695,-88.618673], [42.624723,-88.618574] ] }); // track 1 segment 128
+					trk_segments[t].push({ color:'#0063E6', points:[ [42.624723,-88.618574], [42.624765,-88.618479] ] }); // track 1 segment 129
+					trk_segments[t].push({ color:'#008BE6', points:[ [42.624765,-88.618479], [42.624791,-88.618378] ] }); // track 1 segment 130
+					trk_segments[t].push({ color:'#0079E6', points:[ [42.624791,-88.618378], [42.62483,-88.618283] ] }); // track 1 segment 131
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.62483,-88.618283], [42.624854,-88.618193] ] }); // track 1 segment 132
+					trk_segments[t].push({ color:'#0036E6', points:[ [42.624854,-88.618193], [42.624883,-88.618085] ] }); // track 1 segment 133
+					trk_segments[t].push({ color:'#0012E6', points:[ [42.624883,-88.618085], [42.624932,-88.617987] ] }); // track 1 segment 134
+					trk_segments[t].push({ color:'#0063E6', points:[ [42.624932,-88.617987], [42.624962,-88.617884] ] }); // track 1 segment 135
+					trk_segments[t].push({ color:'#0400E6', points:[ [42.624962,-88.617884], [42.625014,-88.617786] ] }); // track 1 segment 136
+					trk_segments[t].push({ color:'#29E600', points:[ [42.625014,-88.617786], [42.625068,-88.617661] ] }); // track 1 segment 137
+					trk_segments[t].push({ color:'#0004E6', points:[ [42.625068,-88.617661], [42.625128,-88.617573] ] }); // track 1 segment 138
+					trk_segments[t].push({ color:'#7900E6', points:[ [42.625128,-88.617573], [42.625215,-88.617515] ] }); // track 1 segment 139
+					trk_segments[t].push({ color:'#0051E6', points:[ [42.625215,-88.617515], [42.625292,-88.617473] ] }); // track 1 segment 140
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.625292,-88.617473], [42.625367,-88.617471] ] }); // track 1 segment 141
+					trk_segments[t].push({ color:'#0071E6', points:[ [42.625367,-88.617471], [42.625445,-88.617499] ] }); // track 1 segment 142
+					trk_segments[t].push({ color:'#005AE6', points:[ [42.625445,-88.617499], [42.625503,-88.617578] ] }); // track 1 segment 143
+					trk_segments[t].push({ color:'#0063E6', points:[ [42.625503,-88.617578], [42.625529,-88.617683] ] }); // track 1 segment 144
+					trk_segments[t].push({ color:'#0087E6', points:[ [42.625529,-88.617683], [42.625549,-88.617787] ] }); // track 1 segment 145
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.625549,-88.617787], [42.62556,-88.617885] ] }); // track 1 segment 146
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.62556,-88.617885], [42.625529,-88.617979] ] }); // track 1 segment 147
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.625529,-88.617979], [42.625516,-88.618069] ] }); // track 1 segment 148
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.625516,-88.618069], [42.625497,-88.618158] ] }); // track 1 segment 149
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.625497,-88.618158], [42.625471,-88.618245] ] }); // track 1 segment 150
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625471,-88.618245], [42.625429,-88.61839] ] }); // track 1 segment 151
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.625429,-88.61839], [42.625413,-88.618487] ] }); // track 1 segment 152
+					trk_segments[t].push({ color:'#00E6B0', points:[ [42.625413,-88.618487], [42.62539,-88.618575] ] }); // track 1 segment 153
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.62539,-88.618575], [42.625371,-88.618663] ] }); // track 1 segment 154
+					trk_segments[t].push({ color:'#00E6A7', points:[ [42.625371,-88.618663], [42.625359,-88.618754] ] }); // track 1 segment 155
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.625359,-88.618754], [42.62534,-88.618857] ] }); // track 1 segment 156
+					trk_segments[t].push({ color:'#0068E6', points:[ [42.62534,-88.618857], [42.625307,-88.618958] ] }); // track 1 segment 157
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.625307,-88.618958], [42.625279,-88.619057] ] }); // track 1 segment 158
+					trk_segments[t].push({ color:'#00AFE6', points:[ [42.625279,-88.619057], [42.625257,-88.619156] ] }); // track 1 segment 159
+					trk_segments[t].push({ color:'#0079E6', points:[ [42.625257,-88.619156], [42.625229,-88.619258] ] }); // track 1 segment 160
+					trk_segments[t].push({ color:'#0090E6', points:[ [42.625229,-88.619258], [42.625222,-88.619364] ] }); // track 1 segment 161
+					trk_segments[t].push({ color:'#4D00E6', points:[ [42.625222,-88.619364], [42.625079,-88.619529] ] }); // track 1 segment 162
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.625079,-88.619529], [42.624954,-88.619506] ] }); // track 1 segment 163
+					trk_segments[t].push({ color:'#00E600', points:[ [42.624954,-88.619506], [42.624866,-88.619411] ] }); // track 1 segment 164
+					trk_segments[t].push({ color:'#00E648', points:[ [42.624866,-88.619411], [42.62478,-88.619292] ] }); // track 1 segment 165
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.62478,-88.619292], [42.624735,-88.619224] ] }); // track 1 segment 166
+					trk_segments[t].push({ color:'#00E67E', points:[ [42.624735,-88.619224], [42.624696,-88.619153] ] }); // track 1 segment 167
+					trk_segments[t].push({ color:'#00E648', points:[ [42.624696,-88.619153], [42.624654,-88.619092] ] }); // track 1 segment 168
+					trk_segments[t].push({ color:'#00A2E6', points:[ [42.624654,-88.619092], [42.624601,-88.619016] ] }); // track 1 segment 169
+					trk_segments[t].push({ color:'#00D3E6', points:[ [42.624601,-88.619016], [42.624553,-88.61894] ] }); // track 1 segment 170
+					trk_segments[t].push({ color:'#0024E6', points:[ [42.624553,-88.61894], [42.624494,-88.618855] ] }); // track 1 segment 171
+					trk_segments[t].push({ color:'#00AFE6', points:[ [42.624494,-88.618855], [42.624444,-88.618777] ] }); // track 1 segment 172
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.624444,-88.618777], [42.624397,-88.618703] ] }); // track 1 segment 173
+					trk_segments[t].push({ color:'#00E67E', points:[ [42.624397,-88.618703], [42.624352,-88.618639] ] }); // track 1 segment 174
+					trk_segments[t].push({ color:'#00E671', points:[ [42.624352,-88.618639], [42.624297,-88.618594] ] }); // track 1 segment 175
+					trk_segments[t].push({ color:'#90E600', points:[ [42.624297,-88.618594], [42.624251,-88.61859] ] }); // track 1 segment 176
+					trk_segments[t].push({ color:'#00E60D', points:[ [42.624251,-88.61859], [42.624207,-88.61864] ] }); // track 1 segment 177
+					trk_segments[t].push({ color:'#B0E600', points:[ [42.624207,-88.61864], [42.624182,-88.618689] ] }); // track 1 segment 178
+					trk_segments[t].push({ color:'#94E600', points:[ [42.624182,-88.618689], [42.624167,-88.618748] ] }); // track 1 segment 179
+					trk_segments[t].push({ color:'#3BE600', points:[ [42.624167,-88.618748], [42.62415,-88.618815] ] }); // track 1 segment 180
+					trk_segments[t].push({ color:'#1FE600', points:[ [42.62415,-88.618815], [42.624136,-88.618886] ] }); // track 1 segment 181
+					trk_segments[t].push({ color:'#09E600', points:[ [42.624136,-88.618886], [42.624113,-88.618955] ] }); // track 1 segment 182
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.624113,-88.618955], [42.624101,-88.619048] ] }); // track 1 segment 183
+					trk_segments[t].push({ color:'#00E651', points:[ [42.624101,-88.619048], [42.624054,-88.619204] ] }); // track 1 segment 184
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624054,-88.619204], [42.624019,-88.61937] ] }); // track 1 segment 185
+					trk_segments[t].push({ color:'#00E624', points:[ [42.624019,-88.61937], [42.623977,-88.619519] ] }); // track 1 segment 186
+					trk_segments[t].push({ color:'#00E66C', points:[ [42.623977,-88.619519], [42.623946,-88.619595] ] }); // track 1 segment 187
+					trk_segments[t].push({ color:'#29E600', points:[ [42.623946,-88.619595], [42.623929,-88.619664] ] }); // track 1 segment 188
+					trk_segments[t].push({ color:'#00E668', points:[ [42.623929,-88.619664], [42.623911,-88.619747] ] }); // track 1 segment 189
+					trk_segments[t].push({ color:'#00E6C6', points:[ [42.623911,-88.619747], [42.623886,-88.619836] ] }); // track 1 segment 190
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.623886,-88.619836], [42.623849,-88.619914] ] }); // track 1 segment 191
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.623849,-88.619914], [42.623831,-88.619996] ] }); // track 1 segment 192
+					trk_segments[t].push({ color:'#00E690', points:[ [42.623831,-88.619996], [42.623807,-88.62008] ] }); // track 1 segment 193
+					trk_segments[t].push({ color:'#00E629', points:[ [42.623807,-88.62008], [42.6238,-88.62016] ] }); // track 1 segment 194
+					trk_segments[t].push({ color:'#00E632', points:[ [42.6238,-88.62016], [42.623774,-88.620233] ] }); // track 1 segment 195
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.623774,-88.620233], [42.623751,-88.620319] ] }); // track 1 segment 196
+					trk_segments[t].push({ color:'#00D3E6', points:[ [42.623751,-88.620319], [42.623726,-88.620413] ] }); // track 1 segment 197
+					trk_segments[t].push({ color:'#00CAE6', points:[ [42.623726,-88.620413], [42.623687,-88.620499] ] }); // track 1 segment 198
+					trk_segments[t].push({ color:'#00BDE6', points:[ [42.623687,-88.620499], [42.623632,-88.620569] ] }); // track 1 segment 199
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.623632,-88.620569], [42.623565,-88.620604] ] }); // track 1 segment 200
+					trk_segments[t].push({ color:'#00E60D', points:[ [42.623565,-88.620604], [42.623508,-88.620596] ] }); // track 1 segment 201
+					trk_segments[t].push({ color:'#00E624', points:[ [42.623508,-88.620596], [42.623461,-88.620548] ] }); // track 1 segment 202
+					trk_segments[t].push({ color:'#1BE600', points:[ [42.623461,-88.620548], [42.623427,-88.62049] ] }); // track 1 segment 203
+					trk_segments[t].push({ color:'#00E6D8', points:[ [42.623427,-88.62049], [42.62338,-88.620417] ] }); // track 1 segment 204
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.62338,-88.620417], [42.6233,-88.620262] ] }); // track 1 segment 205
+					trk_segments[t].push({ color:'#00E617', points:[ [42.6233,-88.620262], [42.623269,-88.62011] ] }); // track 1 segment 206
+					trk_segments[t].push({ color:'#00E695', points:[ [42.623269,-88.62011], [42.623329,-88.619948] ] }); // track 1 segment 207
+					trk_segments[t].push({ color:'#75E600', points:[ [42.623329,-88.619948], [42.623346,-88.619887] ] }); // track 1 segment 208
+					trk_segments[t].push({ color:'#E6E100', points:[ [42.623346,-88.619887], [42.623384,-88.619871] ] }); // track 1 segment 209
+					trk_segments[t].push({ color:'#00E629', points:[ [42.623384,-88.619871], [42.623443,-88.619868] ] }); // track 1 segment 210
+					trk_segments[t].push({ color:'#E68700', points:[ [42.623443,-88.619868], [42.623476,-88.619876] ] }); // track 1 segment 211
+					trk_segments[t].push({ color:'#E6C600', points:[ [42.623476,-88.619876], [42.623512,-88.619892] ] }); // track 1 segment 212
+					trk_segments[t].push({ color:'#04E600', points:[ [42.623512,-88.619892], [42.623564,-88.61992] ] }); // track 1 segment 213
+					trk_segments[t].push({ color:'#00E668', points:[ [42.623564,-88.61992], [42.623624,-88.619949] ] }); // track 1 segment 214
+					trk_segments[t].push({ color:'#00E656', points:[ [42.623624,-88.619949], [42.623684,-88.619972] ] }); // track 1 segment 215
+					trk_segments[t].push({ color:'#00E609', points:[ [42.623684,-88.619972], [42.623738,-88.619996] ] }); // track 1 segment 216
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.623738,-88.619996], [42.623808,-88.620017] ] }); // track 1 segment 217
+					trk_segments[t].push({ color:'#00E6E1', points:[ [42.623808,-88.620017], [42.62388,-88.620017] ] }); // track 1 segment 218
+					trk_segments[t].push({ color:'#E64D00', points:[ [42.62388,-88.620017], [42.623924,-88.619963] ] }); // track 1 segment 219
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.623924,-88.619963], [42.623971,-88.619898] ] }); // track 1 segment 220
+					trk_segments[t].push({ color:'#00E1E6', points:[ [42.623971,-88.619898], [42.624027,-88.619835] ] }); // track 1 segment 221
+					trk_segments[t].push({ color:'#1FE600', points:[ [42.624027,-88.619835], [42.624044,-88.619765] ] }); // track 1 segment 222
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.624044,-88.619765], [42.624084,-88.619688] ] }); // track 1 segment 223
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.624084,-88.619688], [42.624124,-88.61961] ] }); // track 1 segment 224
+					trk_segments[t].push({ color:'#00E67E', points:[ [42.624124,-88.61961], [42.624156,-88.619533] ] }); // track 1 segment 225
+					trk_segments[t].push({ color:'#00E6D4', points:[ [42.624156,-88.619533], [42.624227,-88.619365] ] }); // track 1 segment 226
+					trk_segments[t].push({ color:'#00E66C', points:[ [42.624227,-88.619365], [42.624263,-88.619198] ] }); // track 1 segment 227
+					trk_segments[t].push({ color:'#00E687', points:[ [42.624263,-88.619198], [42.624319,-88.619036] ] }); // track 1 segment 228
+					trk_segments[t].push({ color:'#00E675', points:[ [42.624319,-88.619036], [42.624335,-88.618951] ] }); // track 1 segment 229
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.624335,-88.618951], [42.624367,-88.618855] ] }); // track 1 segment 230
+					trk_segments[t].push({ color:'#00E695', points:[ [42.624367,-88.618855], [42.624397,-88.618774] ] }); // track 1 segment 231
+					trk_segments[t].push({ color:'#00E67E', points:[ [42.624397,-88.618774], [42.624423,-88.618693] ] }); // track 1 segment 232
+					trk_segments[t].push({ color:'#00E6B0', points:[ [42.624423,-88.618693], [42.624453,-88.618609] ] }); // track 1 segment 233
+					trk_segments[t].push({ color:'#90E600', points:[ [42.624453,-88.618609], [42.624495,-88.618497] ] }); // track 1 segment 234
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.624495,-88.618497], [42.624541,-88.618351] ] }); // track 1 segment 235
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.624541,-88.618351], [42.624561,-88.618275] ] }); // track 1 segment 236
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.624561,-88.618275], [42.624599,-88.618194] ] }); // track 1 segment 237
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.624599,-88.618194], [42.624617,-88.618115] ] }); // track 1 segment 238
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624617,-88.618115], [42.624654,-88.618045] ] }); // track 1 segment 239
+					trk_segments[t].push({ color:'#00E679', points:[ [42.624654,-88.618045], [42.624689,-88.617971] ] }); // track 1 segment 240
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.624689,-88.617971], [42.624723,-88.617889] ] }); // track 1 segment 241
+					trk_segments[t].push({ color:'#00E656', points:[ [42.624723,-88.617889], [42.624743,-88.617809] ] }); // track 1 segment 242
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.624743,-88.617809], [42.624789,-88.617755] ] }); // track 1 segment 243
+					trk_segments[t].push({ color:'#00E682', points:[ [42.624789,-88.617755], [42.624823,-88.617679] ] }); // track 1 segment 244
+					trk_segments[t].push({ color:'#00E6B0', points:[ [42.624823,-88.617679], [42.624858,-88.617599] ] }); // track 1 segment 245
+					trk_segments[t].push({ color:'#00E6E1', points:[ [42.624858,-88.617599], [42.624919,-88.617547] ] }); // track 1 segment 246
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.624919,-88.617547], [42.624965,-88.617496] ] }); // track 1 segment 247
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.624965,-88.617496], [42.625062,-88.617403] ] }); // track 1 segment 248
+					trk_segments[t].push({ color:'#00E617', points:[ [42.625062,-88.617403], [42.625158,-88.617315] ] }); // track 1 segment 249
+					trk_segments[t].push({ color:'#09E600', points:[ [42.625158,-88.617315], [42.625268,-88.617289] ] }); // track 1 segment 250
+					trk_segments[t].push({ color:'#CBE600', points:[ [42.625268,-88.617289], [42.625307,-88.617311] ] }); // track 1 segment 251
+					trk_segments[t].push({ color:'#DCE600', points:[ [42.625307,-88.617311], [42.625342,-88.61734] ] }); // track 1 segment 252
+					trk_segments[t].push({ color:'#00E61B', points:[ [42.625342,-88.61734], [42.625376,-88.617404] ] }); // track 1 segment 253
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.625376,-88.617404], [42.625416,-88.61749] ] }); // track 1 segment 254
+					trk_segments[t].push({ color:'#4800E6', points:[ [42.625416,-88.61749], [42.625447,-88.61761] ] }); // track 1 segment 255
+					trk_segments[t].push({ color:'#00E679', points:[ [42.625447,-88.61761], [42.625433,-88.617696] ] }); // track 1 segment 256
+					trk_segments[t].push({ color:'#0090E6', points:[ [42.625433,-88.617696], [42.625441,-88.617802] ] }); // track 1 segment 257
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.625441,-88.617802], [42.625439,-88.617895] ] }); // track 1 segment 258
+					trk_segments[t].push({ color:'#00E65A', points:[ [42.625439,-88.617895], [42.625435,-88.61798] ] }); // track 1 segment 259
+					trk_segments[t].push({ color:'#00E687', points:[ [42.625435,-88.61798], [42.625429,-88.618069] ] }); // track 1 segment 260
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.625429,-88.618069], [42.625437,-88.618163] ] }); // track 1 segment 261
+					trk_segments[t].push({ color:'#00A6E6', points:[ [42.625437,-88.618163], [42.625409,-88.61826] ] }); // track 1 segment 262
+					trk_segments[t].push({ color:'#0048E6', points:[ [42.625409,-88.61826], [42.625402,-88.618373] ] }); // track 1 segment 263
+					trk_segments[t].push({ color:'#0087E6', points:[ [42.625402,-88.618373], [42.625386,-88.618478] ] }); // track 1 segment 264
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.625386,-88.618478], [42.625362,-88.618579] ] }); // track 1 segment 265
+					trk_segments[t].push({ color:'#0032E6', points:[ [42.625362,-88.618579], [42.62533,-88.618686] ] }); // track 1 segment 266
+					trk_segments[t].push({ color:'#006CE6', points:[ [42.62533,-88.618686], [42.625311,-88.618793] ] }); // track 1 segment 267
+					trk_segments[t].push({ color:'#0071E6', points:[ [42.625311,-88.618793], [42.625291,-88.618899] ] }); // track 1 segment 268
+					trk_segments[t].push({ color:'#0000E6', points:[ [42.625291,-88.618899], [42.625229,-88.619124] ] }); // track 1 segment 269
+					trk_segments[t].push({ color:'#003BE6', points:[ [42.625229,-88.619124], [42.625192,-88.619348] ] }); // track 1 segment 270
+					trk_segments[t].push({ color:'#0082E6', points:[ [42.625192,-88.619348], [42.625163,-88.61956] ] }); // track 1 segment 271
+					trk_segments[t].push({ color:'#0051E6', points:[ [42.625163,-88.61956], [42.625133,-88.619665] ] }); // track 1 segment 272
+					trk_segments[t].push({ color:'#0051E6', points:[ [42.625133,-88.619665], [42.62511,-88.619773] ] }); // track 1 segment 273
+					trk_segments[t].push({ color:'#001BE6', points:[ [42.62511,-88.619773], [42.625061,-88.61987] ] }); // track 1 segment 274
+					trk_segments[t].push({ color:'#003BE6', points:[ [42.625061,-88.61987], [42.625002,-88.619952] ] }); // track 1 segment 275
+					trk_segments[t].push({ color:'#005AE6', points:[ [42.625002,-88.619952], [42.624926,-88.619995] ] }); // track 1 segment 276
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.624926,-88.619995], [42.624866,-88.619969] ] }); // track 1 segment 277
+					trk_segments[t].push({ color:'#00E624', points:[ [42.624866,-88.619969], [42.624819,-88.619921] ] }); // track 1 segment 278
+					trk_segments[t].push({ color:'#00E61B', points:[ [42.624819,-88.619921], [42.624775,-88.619869] ] }); // track 1 segment 279
+					trk_segments[t].push({ color:'#00E682', points:[ [42.624775,-88.619869], [42.624724,-88.619813] ] }); // track 1 segment 280
+					trk_segments[t].push({ color:'#67E600', points:[ [42.624724,-88.619813], [42.624695,-88.619759] ] }); // track 1 segment 281
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.624695,-88.619759], [42.624664,-88.61967] ] }); // track 1 segment 282
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624664,-88.61967], [42.62463,-88.619597] ] }); // track 1 segment 283
+					trk_segments[t].push({ color:'#17E600', points:[ [42.62463,-88.619597], [42.624601,-88.619534] ] }); // track 1 segment 284
+					trk_segments[t].push({ color:'#00E6A2', points:[ [42.624601,-88.619534], [42.624557,-88.619464] ] }); // track 1 segment 285
+					trk_segments[t].push({ color:'#00E663', points:[ [42.624557,-88.619464], [42.624529,-88.619387] ] }); // track 1 segment 286
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.624529,-88.619387], [42.624496,-88.619307] ] }); // track 1 segment 287
+					trk_segments[t].push({ color:'#0071E6', points:[ [42.624496,-88.619307], [42.624447,-88.61922] ] }); // track 1 segment 288
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.624447,-88.61922], [42.624405,-88.619134] ] }); // track 1 segment 289
+					trk_segments[t].push({ color:'#00C6E6', points:[ [42.624405,-88.619134], [42.624326,-88.618962] ] }); // track 1 segment 290
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.624326,-88.618962], [42.624233,-88.618824] ] }); // track 1 segment 291
+					trk_segments[t].push({ color:'#67E600', points:[ [42.624233,-88.618824], [42.624136,-88.618842] ] }); // track 1 segment 292
+					trk_segments[t].push({ color:'#E63B00', points:[ [42.624136,-88.618842], [42.62409,-88.618886] ] }); // track 1 segment 293
+					trk_segments[t].push({ color:'#87E600', points:[ [42.62409,-88.618886], [42.624079,-88.618948] ] }); // track 1 segment 294
+					trk_segments[t].push({ color:'#A2E600', points:[ [42.624079,-88.618948], [42.624053,-88.618998] ] }); // track 1 segment 295
+					trk_segments[t].push({ color:'#71E600', points:[ [42.624053,-88.618998], [42.62403,-88.619056] ] }); // track 1 segment 296
+					trk_segments[t].push({ color:'#67E600', points:[ [42.62403,-88.619056], [42.62401,-88.619117] ] }); // track 1 segment 297
+					trk_segments[t].push({ color:'#04E600', points:[ [42.62401,-88.619117], [42.623992,-88.619189] ] }); // track 1 segment 298
+					trk_segments[t].push({ color:'#00E663', points:[ [42.623992,-88.619189], [42.623976,-88.619272] ] }); // track 1 segment 299
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.623976,-88.619272], [42.623974,-88.619367] ] }); // track 1 segment 300
+					trk_segments[t].push({ color:'#00E6C6', points:[ [42.623974,-88.619367], [42.623958,-88.61946] ] }); // track 1 segment 301
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.623958,-88.61946], [42.623937,-88.619555] ] }); // track 1 segment 302
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.623937,-88.619555], [42.623917,-88.619653] ] }); // track 1 segment 303
+					trk_segments[t].push({ color:'#00B8E6', points:[ [42.623917,-88.619653], [42.623894,-88.619751] ] }); // track 1 segment 304
+					trk_segments[t].push({ color:'#008BE6', points:[ [42.623894,-88.619751], [42.623835,-88.619949] ] }); // track 1 segment 305
+					trk_segments[t].push({ color:'#0056E6', points:[ [42.623835,-88.619949], [42.62375,-88.620141] ] }); // track 1 segment 306
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.62375,-88.620141], [42.623673,-88.620324] ] }); // track 1 segment 307
+					trk_segments[t].push({ color:'#00E1E6', points:[ [42.623673,-88.620324], [42.623637,-88.62041] ] }); // track 1 segment 308
+					trk_segments[t].push({ color:'#00D8E6', points:[ [42.623637,-88.62041], [42.623594,-88.620491] ] }); // track 1 segment 309
+					trk_segments[t].push({ color:'#00E1E6', points:[ [42.623594,-88.620491], [42.623528,-88.620533] ] }); // track 1 segment 310
+					trk_segments[t].push({ color:'#00E632', points:[ [42.623528,-88.620533], [42.623472,-88.620562] ] }); // track 1 segment 311
+					trk_segments[t].push({ color:'#00E60D', points:[ [42.623472,-88.620562], [42.623415,-88.620555] ] }); // track 1 segment 312
+					trk_segments[t].push({ color:'#2DE600', points:[ [42.623415,-88.620555], [42.623368,-88.620521] ] }); // track 1 segment 313
+					trk_segments[t].push({ color:'#3BE600', points:[ [42.623368,-88.620521], [42.623339,-88.620462] ] }); // track 1 segment 314
+					trk_segments[t].push({ color:'#48E600', points:[ [42.623339,-88.620462], [42.623314,-88.620401] ] }); // track 1 segment 315
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.623314,-88.620401], [42.623292,-88.620326] ] }); // track 1 segment 316
+					trk_segments[t].push({ color:'#00E687', points:[ [42.623292,-88.620326], [42.62328,-88.620238] ] }); // track 1 segment 317
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.62328,-88.620238], [42.623282,-88.620143] ] }); // track 1 segment 318
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.623282,-88.620143], [42.623295,-88.620047] ] }); // track 1 segment 319
+					trk_segments[t].push({ color:'#0071E6', points:[ [42.623295,-88.620047], [42.623351,-88.619968] ] }); // track 1 segment 320
+					trk_segments[t].push({ color:'#00E6C6', points:[ [42.623351,-88.619968], [42.623383,-88.619883] ] }); // track 1 segment 321
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.623383,-88.619883], [42.623417,-88.619804] ] }); // track 1 segment 322
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.623417,-88.619804], [42.623469,-88.619741] ] }); // track 1 segment 323
+					trk_segments[t].push({ color:'#00E682', points:[ [42.623469,-88.619741], [42.623512,-88.619674] ] }); // track 1 segment 324
+					trk_segments[t].push({ color:'#00E668', points:[ [42.623512,-88.619674], [42.623559,-88.619616] ] }); // track 1 segment 325
+					trk_segments[t].push({ color:'#00E632', points:[ [42.623559,-88.619616], [42.623646,-88.619504] ] }); // track 1 segment 326
+					trk_segments[t].push({ color:'#00E643', points:[ [42.623646,-88.619504], [42.623722,-88.619374] ] }); // track 1 segment 327
+					trk_segments[t].push({ color:'#00E699', points:[ [42.623722,-88.619374], [42.623786,-88.619214] ] }); // track 1 segment 328
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.623786,-88.619214], [42.623814,-88.619126] ] }); // track 1 segment 329
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.623814,-88.619126], [42.623845,-88.619032] ] }); // track 1 segment 330
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.623845,-88.619032], [42.623877,-88.618936] ] }); // track 1 segment 331
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.623877,-88.618936], [42.623912,-88.618841] ] }); // track 1 segment 332
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.623912,-88.618841], [42.623947,-88.618747] ] }); // track 1 segment 333
+					trk_segments[t].push({ color:'#0090E6', points:[ [42.623947,-88.618747], [42.623984,-88.618653] ] }); // track 1 segment 334
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.623984,-88.618653], [42.624027,-88.618574] ] }); // track 1 segment 335
+					trk_segments[t].push({ color:'#0087E6', points:[ [42.624027,-88.618574], [42.624078,-88.618492] ] }); // track 1 segment 336
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.624078,-88.618492], [42.624122,-88.618405] ] }); // track 1 segment 337
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.624122,-88.618405], [42.624164,-88.618316] ] }); // track 1 segment 338
+					trk_segments[t].push({ color:'#003BE6', points:[ [42.624164,-88.618316], [42.62419,-88.618207] ] }); // track 1 segment 339
+					trk_segments[t].push({ color:'#0036E6', points:[ [42.62419,-88.618207], [42.624232,-88.618107] ] }); // track 1 segment 340
+					trk_segments[t].push({ color:'#005AE6', points:[ [42.624232,-88.618107], [42.624273,-88.61801] ] }); // track 1 segment 341
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.624273,-88.61801], [42.62431,-88.617909] ] }); // track 1 segment 342
+					trk_segments[t].push({ color:'#002DE6', points:[ [42.62431,-88.617909], [42.624348,-88.617805] ] }); // track 1 segment 343
+					trk_segments[t].push({ color:'#005FE6', points:[ [42.624348,-88.617805], [42.624388,-88.617708] ] }); // track 1 segment 344
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.624388,-88.617708], [42.624424,-88.617606] ] }); // track 1 segment 345
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.624424,-88.617606], [42.624464,-88.617507] ] }); // track 1 segment 346
+					trk_segments[t].push({ color:'#0051E6', points:[ [42.624464,-88.617507], [42.624547,-88.617312] ] }); // track 1 segment 347
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.624547,-88.617312], [42.624632,-88.617118] ] }); // track 1 segment 348
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.624632,-88.617118], [42.624729,-88.616982] ] }); // track 1 segment 349
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.624729,-88.616982], [42.624794,-88.61694] ] }); // track 1 segment 350
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.624794,-88.61694], [42.624864,-88.616926] ] }); // track 1 segment 351
+					trk_segments[t].push({ color:'#00CAE6', points:[ [42.624864,-88.616926], [42.625011,-88.616953] ] }); // track 1 segment 352
+					GV_Draw_Track(t);
+
+					// Track #2 ("Race-2")
+					t = 2; trk_info[t] = [];
+					trk_info[t]['name'] = 'Race-2'; trk_info[t]['desc'] = ''; trk_info[t]['clickable'] = true;
+					trk_info[t]['color'] = '#E60000'; trk_info[t]['width'] = 3; trk_info[t]['opacity'] = 0.9;
+					trk_info[t]['outline_color'] = '#000000'; trk_info[t]['outline_width'] = 0; trk_info[t]['fill_color'] = '#E60000'; trk_info[t]['fill_opacity'] = 0;
+					trk_segments[t] = [];
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625823,-88.617026], [42.625816,-88.617047] ] }); // track 2 segment 1
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625816,-88.617047], [42.6258,-88.617064] ] }); // track 2 segment 2
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.6258,-88.617064], [42.625793,-88.617081] ] }); // track 2 segment 3
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625793,-88.617081], [42.625787,-88.617103] ] }); // track 2 segment 4
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625787,-88.617103], [42.62577,-88.617122] ] }); // track 2 segment 5
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.62577,-88.617122], [42.62577,-88.617137] ] }); // track 2 segment 6
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.62577,-88.617137], [42.625762,-88.617151] ] }); // track 2 segment 7
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625762,-88.617151], [42.62575,-88.617163] ] }); // track 2 segment 8
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.62575,-88.617163], [42.625753,-88.617188] ] }); // track 2 segment 9
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625753,-88.617188], [42.625728,-88.617225] ] }); // track 2 segment 10
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625728,-88.617225], [42.625719,-88.617238] ] }); // track 2 segment 11
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625719,-88.617238], [42.62571,-88.617239] ] }); // track 2 segment 12
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.62571,-88.617239], [42.625707,-88.617237] ] }); // track 2 segment 13
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625707,-88.617237], [42.625715,-88.61724] ] }); // track 2 segment 14
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625715,-88.61724], [42.625712,-88.617245] ] }); // track 2 segment 15
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625712,-88.617245], [42.625708,-88.617252] ] }); // track 2 segment 16
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625708,-88.617252], [42.625696,-88.61727] ] }); // track 2 segment 17
+					trk_segments[t].push({ color:'#E61600', points:[ [42.625696,-88.61727], [42.625694,-88.617305] ] }); // track 2 segment 18
+					trk_segments[t].push({ color:'#E64D00', points:[ [42.625694,-88.617305], [42.625692,-88.617345] ] }); // track 2 segment 19
+					trk_segments[t].push({ color:'#E65A00', points:[ [42.625692,-88.617345], [42.625682,-88.617384] ] }); // track 2 segment 20
+					trk_segments[t].push({ color:'#E64800', points:[ [42.625682,-88.617384], [42.625674,-88.617422] ] }); // track 2 segment 21
+					trk_segments[t].push({ color:'#E66300', points:[ [42.625674,-88.617422], [42.625664,-88.617462] ] }); // track 2 segment 22
+					trk_segments[t].push({ color:'#E68300', points:[ [42.625664,-88.617462], [42.625654,-88.617505] ] }); // track 2 segment 23
+					trk_segments[t].push({ color:'#E69000', points:[ [42.625654,-88.617505], [42.625643,-88.617549] ] }); // track 2 segment 24
+					trk_segments[t].push({ color:'#E6B400', points:[ [42.625643,-88.617549], [42.625633,-88.617597] ] }); // track 2 segment 25
+					trk_segments[t].push({ color:'#D3E600', points:[ [42.625633,-88.617597], [42.625618,-88.617708] ] }); // track 2 segment 26
+					trk_segments[t].push({ color:'#7EE600', points:[ [42.625618,-88.617708], [42.625611,-88.617837] ] }); // track 2 segment 27
+					trk_segments[t].push({ color:'#00E604', points:[ [42.625611,-88.617837], [42.625603,-88.617913] ] }); // track 2 segment 28
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.625603,-88.617913], [42.625594,-88.617993] ] }); // track 2 segment 29
+					trk_segments[t].push({ color:'#00E656', points:[ [42.625594,-88.617993], [42.625579,-88.618075] ] }); // track 2 segment 30
+					trk_segments[t].push({ color:'#00E699', points:[ [42.625579,-88.618075], [42.625564,-88.618164] ] }); // track 2 segment 31
+					trk_segments[t].push({ color:'#00E690', points:[ [42.625564,-88.618164], [42.625546,-88.618251] ] }); // track 2 segment 32
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.625546,-88.618251], [42.62552,-88.618338] ] }); // track 2 segment 33
+					trk_segments[t].push({ color:'#00E6D4', points:[ [42.62552,-88.618338], [42.625498,-88.61843] ] }); // track 2 segment 34
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.625498,-88.61843], [42.62548,-88.618518] ] }); // track 2 segment 35
+					trk_segments[t].push({ color:'#00E699', points:[ [42.62548,-88.618518], [42.625463,-88.618606] ] }); // track 2 segment 36
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.625463,-88.618606], [42.625449,-88.618699] ] }); // track 2 segment 37
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.625449,-88.618699], [42.625439,-88.618794] ] }); // track 2 segment 38
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.625439,-88.618794], [42.625427,-88.61889] ] }); // track 2 segment 39
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.625427,-88.61889], [42.625412,-88.618984] ] }); // track 2 segment 40
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.625412,-88.618984], [42.625388,-88.61906] ] }); // track 2 segment 41
+					trk_segments[t].push({ color:'#75E600', points:[ [42.625388,-88.61906], [42.62535,-88.6191] ] }); // track 2 segment 42
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.62535,-88.6191], [42.625284,-88.619045] ] }); // track 2 segment 43
+					trk_segments[t].push({ color:'#5EE600', points:[ [42.625284,-88.619045], [42.625239,-88.619016] ] }); // track 2 segment 44
+					trk_segments[t].push({ color:'#55E600', points:[ [42.625239,-88.619016], [42.625197,-88.618978] ] }); // track 2 segment 45
+					trk_segments[t].push({ color:'#09E600', points:[ [42.625197,-88.618978], [42.625151,-88.618935] ] }); // track 2 segment 46
+					trk_segments[t].push({ color:'#00E600', points:[ [42.625151,-88.618935], [42.625106,-88.618889] ] }); // track 2 segment 47
+					trk_segments[t].push({ color:'#00E65A', points:[ [42.625106,-88.618889], [42.625004,-88.61879] ] }); // track 2 segment 48
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.625004,-88.61879], [42.624896,-88.618672] ] }); // track 2 segment 49
+					trk_segments[t].push({ color:'#00C6E6', points:[ [42.624896,-88.618672], [42.624838,-88.618608] ] }); // track 2 segment 50
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.624838,-88.618608], [42.624785,-88.618541] ] }); // track 2 segment 51
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.624785,-88.618541], [42.624737,-88.61847] ] }); // track 2 segment 52
+					trk_segments[t].push({ color:'#00E695', points:[ [42.624737,-88.61847], [42.624692,-88.618403] ] }); // track 2 segment 53
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624692,-88.618403], [42.624636,-88.618362] ] }); // track 2 segment 54
+					trk_segments[t].push({ color:'#00E636', points:[ [42.624636,-88.618362], [42.624577,-88.618346] ] }); // track 2 segment 55
+					trk_segments[t].push({ color:'#3FE600', points:[ [42.624577,-88.618346], [42.624526,-88.618359] ] }); // track 2 segment 56
+					trk_segments[t].push({ color:'#71E600', points:[ [42.624526,-88.618359], [42.624484,-88.618392] ] }); // track 2 segment 57
+					trk_segments[t].push({ color:'#90E600', points:[ [42.624484,-88.618392], [42.624457,-88.618443] ] }); // track 2 segment 58
+					trk_segments[t].push({ color:'#71E600', points:[ [42.624457,-88.618443], [42.624439,-88.618504] ] }); // track 2 segment 59
+					trk_segments[t].push({ color:'#5EE600', points:[ [42.624439,-88.618504], [42.624428,-88.61857] ] }); // track 2 segment 60
+					trk_segments[t].push({ color:'#32E600', points:[ [42.624428,-88.61857], [42.624427,-88.618642] ] }); // track 2 segment 61
+					trk_segments[t].push({ color:'#00E699', points:[ [42.624427,-88.618642], [42.624438,-88.618732] ] }); // track 2 segment 62
+					trk_segments[t].push({ color:'#00E671', points:[ [42.624438,-88.618732], [42.624441,-88.618819] ] }); // track 2 segment 63
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.624441,-88.618819], [42.62445,-88.618913] ] }); // track 2 segment 64
+					trk_segments[t].push({ color:'#00C6E6', points:[ [42.62445,-88.618913], [42.624458,-88.619014] ] }); // track 2 segment 65
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.624458,-88.619014], [42.624464,-88.619119] ] }); // track 2 segment 66
+					trk_segments[t].push({ color:'#0056E6', points:[ [42.624464,-88.619119], [42.624469,-88.619231] ] }); // track 2 segment 67
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.624469,-88.619231], [42.624471,-88.619344] ] }); // track 2 segment 68
+					trk_segments[t].push({ color:'#3200E6', points:[ [42.624471,-88.619344], [42.624479,-88.619594] ] }); // track 2 segment 69
+					trk_segments[t].push({ color:'#8700E6', points:[ [42.624479,-88.619594], [42.624489,-88.61986] ] }); // track 2 segment 70
+					trk_segments[t].push({ color:'#AB00E6', points:[ [42.624489,-88.61986], [42.624498,-88.620133] ] }); // track 2 segment 71
+					trk_segments[t].push({ color:'#0004E6', points:[ [42.624498,-88.620133], [42.624479,-88.62025] ] }); // track 2 segment 72
+					trk_segments[t].push({ color:'#8200E6', points:[ [42.624479,-88.62025], [42.624387,-88.620294] ] }); // track 2 segment 73
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.624387,-88.620294], [42.624321,-88.620328] ] }); // track 2 segment 74
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.624321,-88.620328], [42.624252,-88.620338] ] }); // track 2 segment 75
+					trk_segments[t].push({ color:'#29E600', points:[ [42.624252,-88.620338], [42.6242,-88.620321] ] }); // track 2 segment 76
+					trk_segments[t].push({ color:'#12E600', points:[ [42.6242,-88.620321], [42.624148,-88.620297] ] }); // track 2 segment 77
+					trk_segments[t].push({ color:'#4CE600', points:[ [42.624148,-88.620297], [42.624101,-88.62027] ] }); // track 2 segment 78
+					trk_segments[t].push({ color:'#C2E600', points:[ [42.624101,-88.62027], [42.624063,-88.620243] ] }); // track 2 segment 79
+					trk_segments[t].push({ color:'#B4E600', points:[ [42.624063,-88.620243], [42.624029,-88.620206] ] }); // track 2 segment 80
+					trk_segments[t].push({ color:'#7EE600', points:[ [42.624029,-88.620206], [42.623999,-88.620156] ] }); // track 2 segment 81
+					trk_segments[t].push({ color:'#99E600', points:[ [42.623999,-88.620156], [42.62397,-88.620108] ] }); // track 2 segment 82
+					trk_segments[t].push({ color:'#75E600', points:[ [42.62397,-88.620108], [42.623941,-88.620056] ] }); // track 2 segment 83
+					trk_segments[t].push({ color:'#3BE600', points:[ [42.623941,-88.620056], [42.623911,-88.619998] ] }); // track 2 segment 84
+					trk_segments[t].push({ color:'#32E600', points:[ [42.623911,-88.619998], [42.623887,-88.619934] ] }); // track 2 segment 85
+					trk_segments[t].push({ color:'#3FE600', points:[ [42.623887,-88.619934], [42.62386,-88.619874] ] }); // track 2 segment 86
+					trk_segments[t].push({ color:'#8CE600', points:[ [42.62386,-88.619874], [42.623826,-88.619831] ] }); // track 2 segment 87
+					trk_segments[t].push({ color:'#94E600', points:[ [42.623826,-88.619831], [42.623782,-88.619813] ] }); // track 2 segment 88
+					trk_segments[t].push({ color:'#E1E600', points:[ [42.623782,-88.619813], [42.623756,-88.619855] ] }); // track 2 segment 89
+					trk_segments[t].push({ color:'#9DE600', points:[ [42.623756,-88.619855], [42.623709,-88.61996] ] }); // track 2 segment 90
+					trk_segments[t].push({ color:'#48E600', points:[ [42.623709,-88.61996], [42.623664,-88.620085] ] }); // track 2 segment 91
+					trk_segments[t].push({ color:'#51E600', points:[ [42.623664,-88.620085], [42.623642,-88.620147] ] }); // track 2 segment 92
+					trk_segments[t].push({ color:'#3BE600', points:[ [42.623642,-88.620147], [42.62363,-88.620216] ] }); // track 2 segment 93
+					trk_segments[t].push({ color:'#3FE600', points:[ [42.62363,-88.620216], [42.623614,-88.620283] ] }); // track 2 segment 94
+					trk_segments[t].push({ color:'#04E600', points:[ [42.623614,-88.620283], [42.623598,-88.620356] ] }); // track 2 segment 95
+					trk_segments[t].push({ color:'#00E604', points:[ [42.623598,-88.620356], [42.623582,-88.62043] ] }); // track 2 segment 96
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.623582,-88.62043], [42.62356,-88.620507] ] }); // track 2 segment 97
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.62356,-88.620507], [42.623533,-88.620581] ] }); // track 2 segment 98
+					trk_segments[t].push({ color:'#17E600', points:[ [42.623533,-88.620581], [42.62349,-88.620627] ] }); // track 2 segment 99
+					trk_segments[t].push({ color:'#7EE600', points:[ [42.62349,-88.620627], [42.623443,-88.620637] ] }); // track 2 segment 100
+					trk_segments[t].push({ color:'#ABE600', points:[ [42.623443,-88.620637], [42.623403,-88.620611] ] }); // track 2 segment 101
+					trk_segments[t].push({ color:'#00E61F', points:[ [42.623403,-88.620611], [42.623368,-88.620547] ] }); // track 2 segment 102
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.623368,-88.620547], [42.623335,-88.620478] ] }); // track 2 segment 103
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.623335,-88.620478], [42.623305,-88.620403] ] }); // track 2 segment 104
+					trk_segments[t].push({ color:'#00E695', points:[ [42.623305,-88.620403], [42.623278,-88.62032] ] }); // track 2 segment 105
+					trk_segments[t].push({ color:'#00E6D8', points:[ [42.623278,-88.62032], [42.623257,-88.620227] ] }); // track 2 segment 106
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.623257,-88.620227], [42.623245,-88.620131] ] }); // track 2 segment 107
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.623245,-88.620131], [42.623242,-88.620036] ] }); // track 2 segment 108
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.623242,-88.620036], [42.62325,-88.619944] ] }); // track 2 segment 109
+					trk_segments[t].push({ color:'#00E68C', points:[ [42.62325,-88.619944], [42.623258,-88.619855] ] }); // track 2 segment 110
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.623258,-88.619855], [42.623291,-88.619782] ] }); // track 2 segment 111
+					trk_segments[t].push({ color:'#1FE600', points:[ [42.623291,-88.619782], [42.623396,-88.619747] ] }); // track 2 segment 112
+					trk_segments[t].push({ color:'#00E6E1', points:[ [42.623396,-88.619747], [42.623528,-88.619826] ] }); // track 2 segment 113
+					trk_segments[t].push({ color:'#00E617', points:[ [42.623528,-88.619826], [42.623575,-88.619872] ] }); // track 2 segment 114
+					trk_segments[t].push({ color:'#29E600', points:[ [42.623575,-88.619872], [42.623619,-88.619913] ] }); // track 2 segment 115
+					trk_segments[t].push({ color:'#00E624', points:[ [42.623619,-88.619913], [42.623669,-88.619955] ] }); // track 2 segment 116
+					trk_segments[t].push({ color:'#00E617', points:[ [42.623669,-88.619955], [42.623719,-88.619995] ] }); // track 2 segment 117
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.623719,-88.619995], [42.623772,-88.620035] ] }); // track 2 segment 118
+					trk_segments[t].push({ color:'#00E651', points:[ [42.623772,-88.620035], [42.623826,-88.620076] ] }); // track 2 segment 119
+					trk_segments[t].push({ color:'#00E682', points:[ [42.623826,-88.620076], [42.623885,-88.620115] ] }); // track 2 segment 120
+					trk_segments[t].push({ color:'#00E65A', points:[ [42.623885,-88.620115], [42.623947,-88.620127] ] }); // track 2 segment 121
+					trk_segments[t].push({ color:'#00E636', points:[ [42.623947,-88.620127], [42.624005,-88.620106] ] }); // track 2 segment 122
+					trk_segments[t].push({ color:'#00E67E', points:[ [42.624005,-88.620106], [42.624062,-88.620063] ] }); // track 2 segment 123
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.624062,-88.620063], [42.624086,-88.619989] ] }); // track 2 segment 124
+					trk_segments[t].push({ color:'#00E61F', points:[ [42.624086,-88.619989], [42.624111,-88.619917] ] }); // track 2 segment 125
+					trk_segments[t].push({ color:'#00E61B', points:[ [42.624111,-88.619917], [42.624137,-88.619846] ] }); // track 2 segment 126
+					trk_segments[t].push({ color:'#00E624', points:[ [42.624137,-88.619846], [42.624155,-88.61977] ] }); // track 2 segment 127
+					trk_segments[t].push({ color:'#00E60D', points:[ [42.624155,-88.61977], [42.624173,-88.619696] ] }); // track 2 segment 128
+					trk_segments[t].push({ color:'#00E612', points:[ [42.624173,-88.619696], [42.624189,-88.619621] ] }); // track 2 segment 129
+					trk_segments[t].push({ color:'#09E600', points:[ [42.624189,-88.619621], [42.624206,-88.619549] ] }); // track 2 segment 130
+					trk_segments[t].push({ color:'#09E600', points:[ [42.624206,-88.619549], [42.624227,-88.619479] ] }); // track 2 segment 131
+					trk_segments[t].push({ color:'#00E600', points:[ [42.624227,-88.619479], [42.624248,-88.619408] ] }); // track 2 segment 132
+					trk_segments[t].push({ color:'#00E617', points:[ [42.624248,-88.619408], [42.624291,-88.619262] ] }); // track 2 segment 133
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.624291,-88.619262], [42.624328,-88.619106] ] }); // track 2 segment 134
+					trk_segments[t].push({ color:'#00E624', points:[ [42.624328,-88.619106], [42.624365,-88.618954] ] }); // track 2 segment 135
+					trk_segments[t].push({ color:'#00E636', points:[ [42.624365,-88.618954], [42.624385,-88.618877] ] }); // track 2 segment 136
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.624385,-88.618877], [42.624407,-88.6188] ] }); // track 2 segment 137
+					trk_segments[t].push({ color:'#00E64D', points:[ [42.624407,-88.6188], [42.624454,-88.618746] ] }); // track 2 segment 138
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.624454,-88.618746], [42.624483,-88.618674] ] }); // track 2 segment 139
+					trk_segments[t].push({ color:'#00E643', points:[ [42.624483,-88.618674], [42.624521,-88.618609] ] }); // track 2 segment 140
+					trk_segments[t].push({ color:'#00E651', points:[ [42.624521,-88.618609], [42.624552,-88.618536] ] }); // track 2 segment 141
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.624552,-88.618536], [42.624587,-88.618469] ] }); // track 2 segment 142
+					trk_segments[t].push({ color:'#00E65F', points:[ [42.624587,-88.618469], [42.624625,-88.618401] ] }); // track 2 segment 143
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.624625,-88.618401], [42.624663,-88.618337] ] }); // track 2 segment 144
+					trk_segments[t].push({ color:'#00E675', points:[ [42.624663,-88.618337], [42.624702,-88.618267] ] }); // track 2 segment 145
+					trk_segments[t].push({ color:'#00E671', points:[ [42.624702,-88.618267], [42.624744,-88.618201] ] }); // track 2 segment 146
+					trk_segments[t].push({ color:'#00E671', points:[ [42.624744,-88.618201], [42.624786,-88.618135] ] }); // track 2 segment 147
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624786,-88.618135], [42.624825,-88.618067] ] }); // track 2 segment 148
+					trk_segments[t].push({ color:'#00E656', points:[ [42.624825,-88.618067], [42.624863,-88.618] ] }); // track 2 segment 149
+					trk_segments[t].push({ color:'#00E64D', points:[ [42.624863,-88.618], [42.624902,-88.617935] ] }); // track 2 segment 150
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624902,-88.617935], [42.62494,-88.617866] ] }); // track 2 segment 151
+					trk_segments[t].push({ color:'#00E690', points:[ [42.62494,-88.617866], [42.624979,-88.617793] ] }); // track 2 segment 152
+					trk_segments[t].push({ color:'#00E679', points:[ [42.624979,-88.617793], [42.62502,-88.617725] ] }); // track 2 segment 153
+					trk_segments[t].push({ color:'#00E6A7', points:[ [42.62502,-88.617725], [42.62511,-88.617587] ] }); // track 2 segment 154
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.62511,-88.617587], [42.625208,-88.617454] ] }); // track 2 segment 155
+					trk_segments[t].push({ color:'#00E6B0', points:[ [42.625208,-88.617454], [42.62527,-88.617414] ] }); // track 2 segment 156
+					trk_segments[t].push({ color:'#00E68C', points:[ [42.62527,-88.617414], [42.625336,-88.617419] ] }); // track 2 segment 157
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.625336,-88.617419], [42.625394,-88.617468] ] }); // track 2 segment 158
+					trk_segments[t].push({ color:'#00E6D8', points:[ [42.625394,-88.617468], [42.62543,-88.617552] ] }); // track 2 segment 159
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.62543,-88.617552], [42.625442,-88.617649] ] }); // track 2 segment 160
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.625442,-88.617649], [42.625436,-88.617746] ] }); // track 2 segment 161
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.625436,-88.617746], [42.625423,-88.61784] ] }); // track 2 segment 162
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.625423,-88.61784], [42.625404,-88.61793] ] }); // track 2 segment 163
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.625404,-88.61793], [42.625384,-88.618022] ] }); // track 2 segment 164
+					trk_segments[t].push({ color:'#00D3E6', points:[ [42.625384,-88.618022], [42.625359,-88.618116] ] }); // track 2 segment 165
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.625359,-88.618116], [42.625332,-88.618211] ] }); // track 2 segment 166
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.625332,-88.618211], [42.625301,-88.618305] ] }); // track 2 segment 167
+					trk_segments[t].push({ color:'#00B8E6', points:[ [42.625301,-88.618305], [42.625272,-88.6184] ] }); // track 2 segment 168
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.625272,-88.6184], [42.625243,-88.618498] ] }); // track 2 segment 169
+					trk_segments[t].push({ color:'#008BE6', points:[ [42.625243,-88.618498], [42.625217,-88.618599] ] }); // track 2 segment 170
+					trk_segments[t].push({ color:'#0087E6', points:[ [42.625217,-88.618599], [42.625192,-88.618701] ] }); // track 2 segment 171
+					trk_segments[t].push({ color:'#007EE6', points:[ [42.625192,-88.618701], [42.625165,-88.618803] ] }); // track 2 segment 172
+					trk_segments[t].push({ color:'#0079E6', points:[ [42.625165,-88.618803], [42.625137,-88.618905] ] }); // track 2 segment 173
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.625137,-88.618905], [42.625109,-88.619004] ] }); // track 2 segment 174
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.625109,-88.619004], [42.625084,-88.619104] ] }); // track 2 segment 175
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.625084,-88.619104], [42.625034,-88.619304] ] }); // track 2 segment 176
+					trk_segments[t].push({ color:'#00AFE6', points:[ [42.625034,-88.619304], [42.624985,-88.6195] ] }); // track 2 segment 177
+					trk_segments[t].push({ color:'#009DE6', points:[ [42.624985,-88.6195], [42.624961,-88.6196] ] }); // track 2 segment 178
+					trk_segments[t].push({ color:'#00A2E6', points:[ [42.624961,-88.6196], [42.62494,-88.619701] ] }); // track 2 segment 179
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.62494,-88.619701], [42.624917,-88.619802] ] }); // track 2 segment 180
+					trk_segments[t].push({ color:'#00A6E6', points:[ [42.624917,-88.619802], [42.624895,-88.619902] ] }); // track 2 segment 181
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.624895,-88.619902], [42.624872,-88.619999] ] }); // track 2 segment 182
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.624872,-88.619999], [42.624848,-88.620097] ] }); // track 2 segment 183
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.624848,-88.620097], [42.624818,-88.620184] ] }); // track 2 segment 184
+					trk_segments[t].push({ color:'#00E643', points:[ [42.624818,-88.620184], [42.624775,-88.620243] ] }); // track 2 segment 185
+					trk_segments[t].push({ color:'#00E612', points:[ [42.624775,-88.620243], [42.624663,-88.62028] ] }); // track 2 segment 186
+					trk_segments[t].push({ color:'#E1E600', points:[ [42.624663,-88.62028], [42.624626,-88.620257] ] }); // track 2 segment 187
+					trk_segments[t].push({ color:'#51E600', points:[ [42.624626,-88.620257], [42.62458,-88.620228] ] }); // track 2 segment 188
+					trk_segments[t].push({ color:'#94E600', points:[ [42.62458,-88.620228], [42.624567,-88.620168] ] }); // track 2 segment 189
+					trk_segments[t].push({ color:'#00E600', points:[ [42.624567,-88.620168], [42.624544,-88.620098] ] }); // track 2 segment 190
+					trk_segments[t].push({ color:'#32E600', points:[ [42.624544,-88.620098], [42.624523,-88.620032] ] }); // track 2 segment 191
+					trk_segments[t].push({ color:'#17E600', points:[ [42.624523,-88.620032], [42.624501,-88.619964] ] }); // track 2 segment 192
+					trk_segments[t].push({ color:'#00E600', points:[ [42.624501,-88.619964], [42.62448,-88.619893] ] }); // track 2 segment 193
+					trk_segments[t].push({ color:'#00E624', points:[ [42.62448,-88.619893], [42.62446,-88.619818] ] }); // track 2 segment 194
+					trk_segments[t].push({ color:'#00E687', points:[ [42.62446,-88.619818], [42.624434,-88.619736] ] }); // track 2 segment 195
+					trk_segments[t].push({ color:'#00E679', points:[ [42.624434,-88.619736], [42.624412,-88.619653] ] }); // track 2 segment 196
+					trk_segments[t].push({ color:'#00E6BD', points:[ [42.624412,-88.619653], [42.624387,-88.619565] ] }); // track 2 segment 197
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.624387,-88.619565], [42.624333,-88.619381] ] }); // track 2 segment 198
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.624333,-88.619381], [42.624277,-88.619183] ] }); // track 2 segment 199
+					trk_segments[t].push({ color:'#0068E6', points:[ [42.624277,-88.619183], [42.624218,-88.618977] ] }); // track 2 segment 200
+					trk_segments[t].push({ color:'#0079E6', points:[ [42.624218,-88.618977], [42.624187,-88.618877] ] }); // track 2 segment 201
+					trk_segments[t].push({ color:'#0090E6', points:[ [42.624187,-88.618877], [42.624144,-88.618788] ] }); // track 2 segment 202
+					trk_segments[t].push({ color:'#00E609', points:[ [42.624144,-88.618788], [42.6241,-88.618739] ] }); // track 2 segment 203
+					trk_segments[t].push({ color:'#94E600', points:[ [42.6241,-88.618739], [42.624054,-88.618738] ] }); // track 2 segment 204
+					trk_segments[t].push({ color:'#E6DD00', points:[ [42.624054,-88.618738], [42.624018,-88.61876] ] }); // track 2 segment 205
+					trk_segments[t].push({ color:'#51E600', points:[ [42.624018,-88.61876], [42.623981,-88.618807] ] }); // track 2 segment 206
+					trk_segments[t].push({ color:'#8CE600', points:[ [42.623981,-88.618807], [42.623957,-88.618861] ] }); // track 2 segment 207
+					trk_segments[t].push({ color:'#32E600', points:[ [42.623957,-88.618861], [42.623945,-88.618931] ] }); // track 2 segment 208
+					trk_segments[t].push({ color:'#00E6A7', points:[ [42.623945,-88.618931], [42.623938,-88.619023] ] }); // track 2 segment 209
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.623938,-88.619023], [42.623922,-88.619101] ] }); // track 2 segment 210
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.623922,-88.619101], [42.623904,-88.619178] ] }); // track 2 segment 211
+					trk_segments[t].push({ color:'#00E656', points:[ [42.623904,-88.619178], [42.623888,-88.61926] ] }); // track 2 segment 212
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.623888,-88.61926], [42.623869,-88.619338] ] }); // track 2 segment 213
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.623869,-88.619338], [42.62385,-88.619416] ] }); // track 2 segment 214
+					trk_segments[t].push({ color:'#00E63B', points:[ [42.62385,-88.619416], [42.623833,-88.619495] ] }); // track 2 segment 215
+					trk_segments[t].push({ color:'#00E648', points:[ [42.623833,-88.619495], [42.623819,-88.619576] ] }); // track 2 segment 216
+					trk_segments[t].push({ color:'#00E66C', points:[ [42.623819,-88.619576], [42.623811,-88.619662] ] }); // track 2 segment 217
+					trk_segments[t].push({ color:'#00E6C1', points:[ [42.623811,-88.619662], [42.623802,-88.619756] ] }); // track 2 segment 218
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.623802,-88.619756], [42.623792,-88.619952] ] }); // track 2 segment 219
+					trk_segments[t].push({ color:'#00A6E6', points:[ [42.623792,-88.619952], [42.623772,-88.620159] ] }); // track 2 segment 220
+					trk_segments[t].push({ color:'#008BE6', points:[ [42.623772,-88.620159], [42.623748,-88.620261] ] }); // track 2 segment 221
+					trk_segments[t].push({ color:'#0009E6', points:[ [42.623748,-88.620261], [42.623684,-88.620343] ] }); // track 2 segment 222
+					trk_segments[t].push({ color:'#00ABE6', points:[ [42.623684,-88.620343], [42.623637,-88.620425] ] }); // track 2 segment 223
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.623637,-88.620425], [42.623584,-88.620493] ] }); // track 2 segment 224
+					trk_segments[t].push({ color:'#00E629', points:[ [42.623584,-88.620493], [42.623532,-88.620531] ] }); // track 2 segment 225
+					trk_segments[t].push({ color:'#00E61F', points:[ [42.623532,-88.620531], [42.623474,-88.620541] ] }); // track 2 segment 226
+					trk_segments[t].push({ color:'#CFE600', points:[ [42.623474,-88.620541], [42.623436,-88.620517] ] }); // track 2 segment 227
+					trk_segments[t].push({ color:'#BDE600', points:[ [42.623436,-88.620517], [42.623402,-88.620481] ] }); // track 2 segment 228
+					trk_segments[t].push({ color:'#75E600', points:[ [42.623402,-88.620481], [42.623375,-88.620427] ] }); // track 2 segment 229
+					trk_segments[t].push({ color:'#5EE600', points:[ [42.623375,-88.620427], [42.623357,-88.620364] ] }); // track 2 segment 230
+					trk_segments[t].push({ color:'#006CE6', points:[ [42.623357,-88.620364], [42.623336,-88.620258] ] }); // track 2 segment 231
+					trk_segments[t].push({ color:'#00D8E6', points:[ [42.623336,-88.620258], [42.623349,-88.62016] ] }); // track 2 segment 232
+					trk_segments[t].push({ color:'#00E690', points:[ [42.623349,-88.62016], [42.623369,-88.620074] ] }); // track 2 segment 233
+					trk_segments[t].push({ color:'#00CAE6', points:[ [42.623369,-88.620074], [42.623383,-88.619975] ] }); // track 2 segment 234
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.623383,-88.619975], [42.623412,-88.61989] ] }); // track 2 segment 235
+					trk_segments[t].push({ color:'#00E6DD', points:[ [42.623412,-88.61989], [42.623454,-88.619811] ] }); // track 2 segment 236
+					trk_segments[t].push({ color:'#1600E6', points:[ [42.623454,-88.619811], [42.623532,-88.61975] ] }); // track 2 segment 237
+					trk_segments[t].push({ color:'#00E6A2', points:[ [42.623532,-88.61975], [42.623614,-88.619604] ] }); // track 2 segment 238
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.623614,-88.619604], [42.623716,-88.619477] ] }); // track 2 segment 239
+					trk_segments[t].push({ color:'#00E6B0', points:[ [42.623716,-88.619477], [42.623762,-88.619408] ] }); // track 2 segment 240
+					trk_segments[t].push({ color:'#00E687', points:[ [42.623762,-88.619408], [42.623803,-88.619338] ] }); // track 2 segment 241
+					trk_segments[t].push({ color:'#00ABE6', points:[ [42.623803,-88.619338], [42.623814,-88.619235] ] }); // track 2 segment 242
+					trk_segments[t].push({ color:'#00CFE6', points:[ [42.623814,-88.619235], [42.623833,-88.619138] ] }); // track 2 segment 243
+					trk_segments[t].push({ color:'#00D3E6', points:[ [42.623833,-88.619138], [42.623856,-88.619043] ] }); // track 2 segment 244
+					trk_segments[t].push({ color:'#00D8E6', points:[ [42.623856,-88.619043], [42.623884,-88.618951] ] }); // track 2 segment 245
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.623884,-88.618951], [42.623919,-88.618861] ] }); // track 2 segment 246
+					trk_segments[t].push({ color:'#00D8E6', points:[ [42.623919,-88.618861], [42.623956,-88.618775] ] }); // track 2 segment 247
+					trk_segments[t].push({ color:'#00E66C', points:[ [42.623956,-88.618775], [42.624,-88.618712] ] }); // track 2 segment 248
+					trk_segments[t].push({ color:'#0024E6', points:[ [42.624,-88.618712], [42.624081,-88.618751] ] }); // track 2 segment 249
+					trk_segments[t].push({ color:'#00E6A2', points:[ [42.624081,-88.618751], [42.624143,-88.618788] ] }); // track 2 segment 250
+					trk_segments[t].push({ color:'#00D8E6', points:[ [42.624143,-88.618788], [42.624203,-88.618845] ] }); // track 2 segment 251
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.624203,-88.618845], [42.624263,-88.618912] ] }); // track 2 segment 252
+					trk_segments[t].push({ color:'#005FE6', points:[ [42.624263,-88.618912], [42.624328,-88.61898] ] }); // track 2 segment 253
+					trk_segments[t].push({ color:'#003BE6', points:[ [42.624328,-88.61898], [42.624396,-88.619048] ] }); // track 2 segment 254
+					trk_segments[t].push({ color:'#1600E6', points:[ [42.624396,-88.619048], [42.624471,-88.619116] ] }); // track 2 segment 255
+					trk_segments[t].push({ color:'#7900E6', points:[ [42.624471,-88.619116], [42.624554,-88.619184] ] }); // track 2 segment 256
+					trk_segments[t].push({ color:'#5F00E6', points:[ [42.624554,-88.619184], [42.624643,-88.61923] ] }); // track 2 segment 257
+					trk_segments[t].push({ color:'#6300E6', points:[ [42.624643,-88.61923], [42.624736,-88.619259] ] }); // track 2 segment 258
+					trk_segments[t].push({ color:'#6300E6', points:[ [42.624736,-88.619259], [42.624828,-88.619225] ] }); // track 2 segment 259
+					trk_segments[t].push({ color:'#9E00E6', points:[ [42.624828,-88.619225], [42.625013,-88.619125] ] }); // track 2 segment 260
+					trk_segments[t].push({ color:'#3F00E6', points:[ [42.625013,-88.619125], [42.625119,-88.618918] ] }); // track 2 segment 261
+					trk_segments[t].push({ color:'#1200E6', points:[ [42.625119,-88.618918], [42.625187,-88.618692] ] }); // track 2 segment 262
+					trk_segments[t].push({ color:'#2900E6', points:[ [42.625187,-88.618692], [42.625203,-88.61857] ] }); // track 2 segment 263
+					trk_segments[t].push({ color:'#00E695', points:[ [42.625203,-88.61857], [42.625215,-88.618481] ] }); // track 2 segment 264
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625215,-88.618481], [42.625237,-88.618257] ] }); // track 2 segment 265
+					trk_segments[t].push({ color:'#000DE6', points:[ [42.625237,-88.618257], [42.625249,-88.61802] ] }); // track 2 segment 266
+					trk_segments[t].push({ color:'#2400E6', points:[ [42.625249,-88.61802], [42.62528,-88.617776] ] }); // track 2 segment 267
+					trk_segments[t].push({ color:'#003BE6', points:[ [42.62528,-88.617776], [42.625336,-88.61769] ] }); // track 2 segment 268
+					trk_segments[t].push({ color:'#09E600', points:[ [42.625336,-88.61769], [42.62541,-88.617577] ] }); // track 2 segment 269
+					trk_segments[t].push({ color:'#CB00E6', points:[ [42.62541,-88.617577], [42.625558,-88.61777] ] }); // track 2 segment 270
+					trk_segments[t].push({ color:'#00E1E6', points:[ [42.625558,-88.61777], [42.625585,-88.617862] ] }); // track 2 segment 271
+					trk_segments[t].push({ color:'#04E600', points:[ [42.625585,-88.617862], [42.625565,-88.617933] ] }); // track 2 segment 272
+					trk_segments[t].push({ color:'#00E68C', points:[ [42.625565,-88.617933], [42.625542,-88.618017] ] }); // track 2 segment 273
+					trk_segments[t].push({ color:'#00AFE6', points:[ [42.625542,-88.618017], [42.625507,-88.618109] ] }); // track 2 segment 274
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.625507,-88.618109], [42.625476,-88.618203] ] }); // track 2 segment 275
+					trk_segments[t].push({ color:'#00BDE6', points:[ [42.625476,-88.618203], [42.625442,-88.618294] ] }); // track 2 segment 276
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625442,-88.618294], [42.625385,-88.618455] ] }); // track 2 segment 277
+					trk_segments[t].push({ color:'#00E6E1', points:[ [42.625385,-88.618455], [42.625349,-88.61854] ] }); // track 2 segment 278
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.625349,-88.61854], [42.625309,-88.618639] ] }); // track 2 segment 279
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.625309,-88.618639], [42.62527,-88.618731] ] }); // track 2 segment 280
+					trk_segments[t].push({ color:'#0063E6', points:[ [42.62527,-88.618731], [42.625235,-88.618831] ] }); // track 2 segment 281
+					trk_segments[t].push({ color:'#0024E6', points:[ [42.625235,-88.618831], [42.625193,-88.618933] ] }); // track 2 segment 282
+					trk_segments[t].push({ color:'#0099E6', points:[ [42.625193,-88.618933], [42.625162,-88.61903] ] }); // track 2 segment 283
+					trk_segments[t].push({ color:'#0079E6', points:[ [42.625162,-88.61903], [42.625141,-88.619135] ] }); // track 2 segment 284
+					trk_segments[t].push({ color:'#0094E6', points:[ [42.625141,-88.619135], [42.625102,-88.619227] ] }); // track 2 segment 285
+					trk_segments[t].push({ color:'#00E6D4', points:[ [42.625102,-88.619227], [42.625061,-88.619412] ] }); // track 2 segment 286
+					trk_segments[t].push({ color:'#006CE6', points:[ [42.625061,-88.619412], [42.625012,-88.619622] ] }); // track 2 segment 287
+					trk_segments[t].push({ color:'#00A2E6', points:[ [42.625012,-88.619622], [42.624964,-88.619821] ] }); // track 2 segment 288
+					trk_segments[t].push({ color:'#00E6E6', points:[ [42.624964,-88.619821], [42.624951,-88.619918] ] }); // track 2 segment 289
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.624951,-88.619918], [42.624942,-88.620019] ] }); // track 2 segment 290
+					trk_segments[t].push({ color:'#0029E6', points:[ [42.624942,-88.620019], [42.624914,-88.620129] ] }); // track 2 segment 291
+					trk_segments[t].push({ color:'#00A2E6', points:[ [42.624914,-88.620129], [42.624873,-88.620218] ] }); // track 2 segment 292
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.624873,-88.620218], [42.62481,-88.620256] ] }); // track 2 segment 293
+					trk_segments[t].push({ color:'#2DE600', points:[ [42.62481,-88.620256], [42.624758,-88.620272] ] }); // track 2 segment 294
+					trk_segments[t].push({ color:'#5EE600', points:[ [42.624758,-88.620272], [42.624711,-88.62025] ] }); // track 2 segment 295
+					trk_segments[t].push({ color:'#17E600', points:[ [42.624711,-88.62025], [42.624665,-88.62021] ] }); // track 2 segment 296
+					trk_segments[t].push({ color:'#48E600', points:[ [42.624665,-88.62021], [42.62463,-88.620159] ] }); // track 2 segment 297
+					trk_segments[t].push({ color:'#00E62D', points:[ [42.62463,-88.620159], [42.624591,-88.620098] ] }); // track 2 segment 298
+					trk_segments[t].push({ color:'#00E668', points:[ [42.624591,-88.620098], [42.624555,-88.620027] ] }); // track 2 segment 299
+					trk_segments[t].push({ color:'#00E604', points:[ [42.624555,-88.620027], [42.624526,-88.619961] ] }); // track 2 segment 300
+					trk_segments[t].push({ color:'#00E624', points:[ [42.624526,-88.619961], [42.624496,-88.619892] ] }); // track 2 segment 301
+					trk_segments[t].push({ color:'#4CE600', points:[ [42.624496,-88.619892], [42.624467,-88.619835] ] }); // track 2 segment 302
+					trk_segments[t].push({ color:'#32E600', points:[ [42.624467,-88.619835], [42.624438,-88.619775] ] }); // track 2 segment 303
+					trk_segments[t].push({ color:'#00E624', points:[ [42.624438,-88.619775], [42.624402,-88.619712] ] }); // track 2 segment 304
+					trk_segments[t].push({ color:'#00E636', points:[ [42.624402,-88.619712], [42.62437,-88.619643] ] }); // track 2 segment 305
+					trk_segments[t].push({ color:'#00E612', points:[ [42.62437,-88.619643], [42.624338,-88.619578] ] }); // track 2 segment 306
+					trk_segments[t].push({ color:'#00E6CA', points:[ [42.624338,-88.619578], [42.624251,-88.619427] ] }); // track 2 segment 307
+					trk_segments[t].push({ color:'#00E6CF', points:[ [42.624251,-88.619427], [42.624175,-88.619265] ] }); // track 2 segment 308
+					trk_segments[t].push({ color:'#00A2E6', points:[ [42.624175,-88.619265], [42.624089,-88.619091] ] }); // track 2 segment 309
+					trk_segments[t].push({ color:'#00C6E6', points:[ [42.624089,-88.619091], [42.624037,-88.619018] ] }); // track 2 segment 310
+					trk_segments[t].push({ color:'#6CE600', points:[ [42.624037,-88.619018], [42.623995,-88.618984] ] }); // track 2 segment 311
+					trk_segments[t].push({ color:'#E65100', points:[ [42.623995,-88.618984], [42.623967,-88.618998] ] }); // track 2 segment 312
+					trk_segments[t].push({ color:'#79E600', points:[ [42.623967,-88.618998], [42.62392,-88.619009] ] }); // track 2 segment 313
+					trk_segments[t].push({ color:'#E6C600', points:[ [42.62392,-88.619009], [42.623897,-88.61905] ] }); // track 2 segment 314
+					trk_segments[t].push({ color:'#90E600', points:[ [42.623897,-88.61905], [42.623879,-88.619108] ] }); // track 2 segment 315
+					trk_segments[t].push({ color:'#E6C200', points:[ [42.623879,-88.619108], [42.623866,-88.619209] ] }); // track 2 segment 316
+					trk_segments[t].push({ color:'#00E600', points:[ [42.623866,-88.619209], [42.623849,-88.619282] ] }); // track 2 segment 317
+					trk_segments[t].push({ color:'#00E636', points:[ [42.623849,-88.619282], [42.623825,-88.619357] ] }); // track 2 segment 318
+					trk_segments[t].push({ color:'#00E63F', points:[ [42.623825,-88.619357], [42.623803,-88.619434] ] }); // track 2 segment 319
+					trk_segments[t].push({ color:'#00E612', points:[ [42.623803,-88.619434], [42.623787,-88.619509] ] }); // track 2 segment 320
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.623787,-88.619509], [42.623757,-88.619665] ] }); // track 2 segment 321
+					trk_segments[t].push({ color:'#00E6C6', points:[ [42.623757,-88.619665], [42.623742,-88.619758] ] }); // track 2 segment 322
+					trk_segments[t].push({ color:'#00DDE6', points:[ [42.623742,-88.619758], [42.623723,-88.619854] ] }); // track 2 segment 323
+					trk_segments[t].push({ color:'#00CFE6', points:[ [42.623723,-88.619854], [42.623703,-88.619951] ] }); // track 2 segment 324
+					trk_segments[t].push({ color:'#00C1E6', points:[ [42.623703,-88.619951], [42.62368,-88.620048] ] }); // track 2 segment 325
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.62368,-88.620048], [42.623659,-88.620147] ] }); // track 2 segment 326
+					trk_segments[t].push({ color:'#00D8E6', points:[ [42.623659,-88.620147], [42.623623,-88.62034] ] }); // track 2 segment 327
+					trk_segments[t].push({ color:'#00E6D8', points:[ [42.623623,-88.62034], [42.623541,-88.620499] ] }); // track 2 segment 328
+					trk_segments[t].push({ color:'#00E668', points:[ [42.623541,-88.620499], [42.62343,-88.620584] ] }); // track 2 segment 329
+					trk_segments[t].push({ color:'#E66300', points:[ [42.62343,-88.620584], [42.623369,-88.6206] ] }); // track 2 segment 330
+					trk_segments[t].push({ color:'#43E600', points:[ [42.623369,-88.6206], [42.62335,-88.620535] ] }); // track 2 segment 331
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.62335,-88.620535], [42.623289,-88.620362] ] }); // track 2 segment 332
+					trk_segments[t].push({ color:'#3200E6', points:[ [42.623289,-88.620362], [42.623287,-88.620237] ] }); // track 2 segment 333
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.623287,-88.620237], [42.623337,-88.620147] ] }); // track 2 segment 334
+					trk_segments[t].push({ color:'#004DE6', points:[ [42.623337,-88.620147], [42.623368,-88.620042] ] }); // track 2 segment 335
+					trk_segments[t].push({ color:'#0048E6', points:[ [42.623368,-88.620042], [42.623385,-88.619931] ] }); // track 2 segment 336
+					trk_segments[t].push({ color:'#00E6B4', points:[ [42.623385,-88.619931], [42.623429,-88.619859] ] }); // track 2 segment 337
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.623429,-88.619859], [42.62347,-88.619783] ] }); // track 2 segment 338
+					trk_segments[t].push({ color:'#00B4E6', points:[ [42.62347,-88.619783], [42.623516,-88.619701] ] }); // track 2 segment 339
+					trk_segments[t].push({ color:'#00AFE6', points:[ [42.623516,-88.619701], [42.623572,-88.619631] ] }); // track 2 segment 340
+					trk_segments[t].push({ color:'#00E6AB', points:[ [42.623572,-88.619631], [42.623622,-88.619568] ] }); // track 2 segment 341
+					trk_segments[t].push({ color:'#003FE6', points:[ [42.623622,-88.619568], [42.623689,-88.619499] ] }); // track 2 segment 342
+					trk_segments[t].push({ color:'#00E6B8', points:[ [42.623689,-88.619499], [42.623736,-88.61943] ] }); // track 2 segment 343
+					trk_segments[t].push({ color:'#00E61F', points:[ [42.623736,-88.61943], [42.623761,-88.619358] ] }); // track 2 segment 344
+					trk_segments[t].push({ color:'#00E69E', points:[ [42.623761,-88.619358], [42.623812,-88.619298] ] }); // track 2 segment 345
+					trk_segments[t].push({ color:'#00E699', points:[ [42.623812,-88.619298], [42.623879,-88.619291] ] }); // track 2 segment 346
+					trk_segments[t].push({ color:'#17E600', points:[ [42.623879,-88.619291], [42.623977,-88.619357] ] }); // track 2 segment 347
+					trk_segments[t].push({ color:'#5EE600', points:[ [42.623977,-88.619357], [42.624021,-88.619388] ] }); // track 2 segment 348
+					trk_segments[t].push({ color:'#0024E6', points:[ [42.624021,-88.619388], [42.624174,-88.619495] ] }); // track 2 segment 349
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.624174,-88.619495], [42.624299,-88.619574] ] }); // track 2 segment 350
+					trk_segments[t].push({ color:'#2900E6', points:[ [42.624299,-88.619574], [42.624388,-88.619601] ] }); // track 2 segment 351
+					trk_segments[t].push({ color:'#1B00E6', points:[ [42.624388,-88.619601], [42.624478,-88.619613] ] }); // track 2 segment 352
+					trk_segments[t].push({ color:'#2900E6', points:[ [42.624478,-88.619613], [42.624568,-88.619592] ] }); // track 2 segment 353
+					trk_segments[t].push({ color:'#5600E6', points:[ [42.624568,-88.619592], [42.624654,-88.619539] ] }); // track 2 segment 354
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.624654,-88.619539], [42.624751,-88.619477] ] }); // track 2 segment 355
+					trk_segments[t].push({ color:'#3B00E6', points:[ [42.624751,-88.619477], [42.624831,-88.619414] ] }); // track 2 segment 356
+					trk_segments[t].push({ color:'#E100E6', points:[ [42.624831,-88.619414], [42.624871,-88.619283] ] }); // track 2 segment 357
+					trk_segments[t].push({ color:'#6C00E6', points:[ [42.624871,-88.619283], [42.624885,-88.619154] ] }); // track 2 segment 358
+					trk_segments[t].push({ color:'#B000E6', points:[ [42.624885,-88.619154], [42.624912,-88.619022] ] }); // track 2 segment 359
+					trk_segments[t].push({ color:'#4800E6', points:[ [42.624912,-88.619022], [42.624932,-88.618898] ] }); // track 2 segment 360
+					trk_segments[t].push({ color:'#9E00E6', points:[ [42.624932,-88.618898], [42.624959,-88.618768] ] }); // track 2 segment 361
+					trk_segments[t].push({ color:'#6800E6', points:[ [42.624959,-88.618768], [42.624996,-88.618648] ] }); // track 2 segment 362
+					trk_segments[t].push({ color:'#5100E6', points:[ [42.624996,-88.618648], [42.625044,-88.618538] ] }); // track 2 segment 363
+					trk_segments[t].push({ color:'#5F00E6', points:[ [42.625044,-88.618538], [42.625062,-88.618411] ] }); // track 2 segment 364
+					trk_segments[t].push({ color:'#B000E6', points:[ [42.625062,-88.618411], [42.625092,-88.61828] ] }); // track 2 segment 365
+					trk_segments[t].push({ color:'#A200E6', points:[ [42.625092,-88.61828], [42.625121,-88.61815] ] }); // track 2 segment 366
+					trk_segments[t].push({ color:'#A700E6', points:[ [42.625121,-88.61815], [42.625146,-88.618018] ] }); // track 2 segment 367
+					trk_segments[t].push({ color:'#7900E6', points:[ [42.625146,-88.618018], [42.625163,-88.617888] ] }); // track 2 segment 368
+					trk_segments[t].push({ color:'#CB00E6', points:[ [42.625163,-88.617888], [42.625211,-88.617617] ] }); // track 2 segment 369
+					trk_segments[t].push({ color:'#8A8A8A', points:[ [42.625211,-88.617617], [42.625306,-88.617358] ] }); // track 2 segment 370
+					trk_segments[t].push({ color:'#0D00E6', points:[ [42.625306,-88.617358], [42.625386,-88.617304] ] }); // track 2 segment 371
+					trk_segments[t].push({ color:'#00E651', points:[ [42.625386,-88.617304], [42.625448,-88.617305] ] }); // track 2 segment 372
+					GV_Draw_Track(t);
+
+					t = 1; GV_Add_Track_to_Tracklist({bullet:'- ',name:trk_info[t]['name'],desc:trk_info[t]['desc'],color:trk_info[t]['color'],number:t});
+					t = 2; GV_Add_Track_to_Tracklist({bullet:'- ',name:trk_info[t]['name'],desc:trk_info[t]['desc'],color:trk_info[t]['color'],number:t});
+
+
+
+
+					GV_Finish_Map(gv_options);
+
+				} else {
+					document.getElementById('gmap_div').style.backgroundColor = '#DDDDDD';
+					document.getElementById('gmap_div').innerHTML = 'Sorry, your Google Map cannot be displayed.';
+				}
+			}
+			GV_Map(); // execute the above code
+		</script>
+
+
+	</body>
+
+</html>
